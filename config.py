@@ -1,11 +1,12 @@
 import os
+from dotenv import load_dotenv
+
+# carrega as variáveis de ambiente
+load_dotenv()
 
 class Config: 
-  SECRET_KEY = os.getenv('SECRET_KEY', 'chave-secreta-para-desenvolvimento')
+  SECRET_KEY = os.getenv('SECRET_KEY')
 
-  SQLALCHEMY_DATABASE_URI = os.getenv(
-    'DATABASE_URL',
-    'mysql+pymysql://root:root@localhost:3306/gestao_pedidos_clientes'
-  )
+  SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')
 
   SQLALCHEMY_TRACK_MODIFICATIONS = False
