@@ -3,6 +3,7 @@ from sqlalchemy import text
 
 from config import Config
 from app.extensions import db
+from app import models
 
 def create_app():
   app = Flask(__name__)
