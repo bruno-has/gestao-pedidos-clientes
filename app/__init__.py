@@ -5,6 +5,7 @@ from config import Config
 from app.extensions import db
 from app import models
 from app.routes.cliente_route import cliente_bp
+from app.routes.pedido_route import pedido_bp
 
 def create_app():
   app = Flask(__name__)
@@ -19,6 +20,9 @@ def create_app():
 
   # registra as rotas de clientes
   app.register_blueprint(cliente_bp)
+
+  # registra as rotas de pedidos
+  app.register_blueprint(pedido_bp)
 
   @app.route('/')
   def inicio():

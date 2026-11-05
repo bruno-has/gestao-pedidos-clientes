@@ -1,10 +1,9 @@
-<<<<<<< HEAD
 # Ambiente Virtual
 venv/
 .venv/
 
 # Arquivos Python
-pycache/
+__pycache__/
 *.py[cod]
 
 # Variáveis de ambiente
@@ -16,3 +15,6 @@ Thumbs.db
 
 # Configurações do editor
 .vscode/
+
+# Testes
+.pytest_cache/

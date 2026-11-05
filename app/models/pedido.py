@@ -9,4 +9,4 @@ class Pedido(db.Model):
   data_retirada = db.Column(db.DateTime, nullable=False)
   status = db.Column(db.String(20), nullable=False, default='pendente')
   observacoes = db.Column(db.Text, nullable=True)
-  itens = db.relationship('ItemPedido', backref='pedido', lazy=True)
+  itens = db.relationship('ItemPedido', backref='pedido', lazy=True, cascade='all, delete-orphan')
