@@ -4,6 +4,7 @@ from sqlalchemy import text
 from config import Config
 from app.extensions import db
 from app import models
+from app.routes.cliente_route import cliente_bp
 
 def create_app():
   app = Flask(__name__)
@@ -13,8 +14,11 @@ def create_app():
   # carrega as configurações da aplicação
   app.config.from_object(Config)
 
-  # inicializa a conexão com o banco de dados
+  # inicializa o SQLAlchemy
   db.init_app(app)
+
+  # registra as rotas de clientes
+  app.register_blueprint(cliente_bp)
 
   @app.route('/')
   def inicio():
