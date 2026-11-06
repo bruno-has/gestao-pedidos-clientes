@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from flask_login import login_required
 
 from app.controllers.cliente_controller import (
   criar_cliente, 
@@ -10,6 +11,11 @@ from app.controllers.cliente_controller import (
 )
 
 cliente_bp = Blueprint('clientes', __name__, url_prefix='/clientes')
+
+@cliente_bp.before_request
+@login_required
+def exigir_autenticacao():
+  pass
 
 @cliente_bp.route('/', methods=['POST'])
 def cadastrar():

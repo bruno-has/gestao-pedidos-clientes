@@ -1,11 +1,23 @@
-from flask import Flask
+from flask import Flask, jsonify
 from sqlalchemy import text
 
 from config import Config
-from app.extensions import db
+from app.extensions import db, login_manager
 from app import models
 from app.routes.cliente_route import cliente_bp
 from app.routes.pedido_route import pedido_bp
+from app.routes.auth_route import auth_bp
+from app.models.usuario import Usuario
+
+@login_manager.user_loader
+def carregar_usuario(usuario_id):
+  return db.session.get(Usuario, int(usuario_id))
+
+@login_manager.unauthorized_handler
+def usuario_nao_autorizado():
+  return jsonify({
+    'erro': 'Autenticação necessária para acessar esse recurso'
+  }), 401
 
 def create_app(test_config=None):
   app = Flask(__name__)
@@ -21,9 +33,15 @@ def create_app(test_config=None):
   # inicializa o SQLAlchemy
   db.init_app(app)
 
+  login_manager.init_app(app)
+  login_manager.login_view = 'auth.login'
+  login_manager.login_message = 'Faça login para acessar está página'
+  login_manager.login_message_category = 'warning'
+
   # registra as rotas
   app.register_blueprint(cliente_bp)
   app.register_blueprint(pedido_bp)
+  app.register_blueprint(auth_bp)
 
   @app.route('/')
   def inicio():

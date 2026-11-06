@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from flask_login import login_required
 
 from app.controllers.pedido_controller import (
   criar_pedido,
@@ -11,6 +12,11 @@ from app.controllers.pedido_controller import (
 )
 
 pedido_bp = Blueprint('pedidos', __name__, url_prefix='/pedidos')
+
+@pedido_bp.before_request
+@login_required
+def exigir_autenticacao():
+  pass
 
 @pedido_bp.route('/', methods=['POST'])
 def cadastrar():

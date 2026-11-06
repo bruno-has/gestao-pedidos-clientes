@@ -1,3 +1,7 @@
+import pytest
+
+pytestmark = pytest.mark.usefixtures('autenticar_cliente')
+
 def cadastrar_cliente(client):
   return client.post('/clientes/', json={
     'nome': 'João da Silva',
