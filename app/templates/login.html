@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+<section class="login-container">
+  <div class="login-card">
+
+    <div class="login-logo">
+      <span aria-hidden="true">🧁</span>
+    </div>
+
+    <h1>Gestão de Pedidos e Clientes</h1>
+
+    <p class="login-descricao">Acesse sua conta para continuar.</p>
+
+      <form method="POST" action="{{ url_for('web.login') }}" class="login-form">
+
+        <div class="form-group">
+          <label for="email">E-mail</label>
+          <input type="email" id="email" name="email" placeholder="Digite seu e-mail" autocomplete="username" required autofocus>
+        </div>
+
+        <div class="form-group">
+          <label for="senha">Senha</label>
+          <input type="password" id="senha" name="senha" placeholder="Digite sua senha" autocomplete="current-password" required>
+        </div>
+
+        <button type="submit" class="button btn-entrar">Entrar</button>
+
+      </form>
+
+      <p class="login-footer">Sistema interno de gerenciamento</p>
+
+  </div>
+
+</section>
+
+{% endblock %}

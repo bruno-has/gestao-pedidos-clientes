@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Painel{% endblock %}
+
+{% block content %}
+
+<section class="dashboard-container">
+
+  <div class="dashboard-header">
+
+    <h1>Olá, {{ current_user.nome }}!</h1>
+    <p>Selecione uma opção:</p>
+  
+  </div>
+
+  <div class="dashboard-menu">
+
+    <a href="{{ url_for('web.clientes') }}" class="menu-card">
+      <span class="menu-icon" aria-hidden="true">👥</span>
+      <span>Clientes</span>
+    </a>
+
+    <a href="{{ url_for('web.novo_pedido') }}" class="menu-card menu-principal">
+      <span class="menu-icon" aria-hidden="true">🛒</span>
+      <span>Novo Pedido</span>
+    </a>
+
+    <a href="{{ url_for('web.pedidos') }}" class="menu-card">
+      <span class="menu-icon" aria-hidden="true">📋</span>
+      <span>Pedidos</span>
+    </a>
+
+  </div>
+
+</section>
+
+{% endblock %}

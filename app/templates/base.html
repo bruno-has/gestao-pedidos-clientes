@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sistema de gestão de pedidos e clientes">
+  <title>{% block title %}Gestão de Pedidos e Clientes{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
+</head>
+<body>
+  {% if current_user.is_authenticated %}
+    <header class="main-header">
+      <a href="{{ url_for('web.painel') }}" class="logo">
+        <span class="icon-logo" aria-hidden="true">🧁</span>
+
+        <span class="nome-logo">Gestão de Pedidos e Clientes</span>
+      </a>
+
+      <div class="header-user">
+        <span class="msg-user">
+          <span aria-hidden="true">👤</span>
+          Olá, {{ current_user.nome }}!
+        </span>
+
+        <form action="{{ url_for('web.sair') }}" method="POST">
+          <button type="submit" class="btn-sair" aria-label="Sair do sistema" title="Sair">
+            <span aria-hidden="true">⇥</span>
+          </button>
+        </form>
+      </div>
+
+    </header>
+  {% endif %}
+
+  <main class="main-content">
+
+    {% with mensagens = get_flashed_messages(with_categories=true) %}
+      {% if mensagens %}
+        <div class="flash-container">
+          {% for categoria, mensagem in mensagens %}
+          <div class="flash-message flash-{{ categoria }}" role="status">
+            {{ mensagem }}
+          </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+
+  </main>
+
+</body>
+</html>

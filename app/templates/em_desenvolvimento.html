@@ -1,0 +1,28 @@
+
+{% extends "base.html" %}
+
+{% block title %}{{ titulo }} | Gestão de Pedidos e Clientes{% endblock %}
+
+{% block content %}
+
+<section class="placeholder-container">
+
+  <a href="{{ url_for('web.painel') }}" class="menu-voltar">
+    ← Voltar ao Menu
+  </a>
+
+  <div class="placeholder-card">
+  
+    <span class="placeholder-icon" aria-hidden="true">🚧</span>
+
+    <h1>{{ titulo }}</h1>
+
+    <p>{{ descricao }}</p>
+
+    <span class="placeholder-label">Funcionalidade em desenvolvimento</span>
+  
+  </div>
+
+</section>
+
+{% endblock %}
