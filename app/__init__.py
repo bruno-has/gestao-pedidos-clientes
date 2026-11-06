@@ -7,7 +7,7 @@ from app import models
 from app.routes.cliente_route import cliente_bp
 from app.routes.pedido_route import pedido_bp
 
-def create_app():
+def create_app(test_config=None):
   app = Flask(__name__)
 
   app.json.ensure_ascii = False
@@ -15,13 +15,14 @@ def create_app():
   # carrega as configurações da aplicação
   app.config.from_object(Config)
 
+  if test_config is not None:
+    app.config.update(test_config)
+
   # inicializa o SQLAlchemy
   db.init_app(app)
 
-  # registra as rotas de clientes
+  # registra as rotas
   app.register_blueprint(cliente_bp)
-
-  # registra as rotas de pedidos
   app.register_blueprint(pedido_bp)
 
   @app.route('/')
