@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+  {% if cliente %}Editar Cliente{% else %}Novo Cliente{% endif %}
+
+{% endblock %}
+
+{% block content %}
+
+<section class="form-page">
+
+  <a href="{{ url_for('web.clientes') }}" class="btn-voltar">
+    ← Voltar para Clientes
+  </a>
+
+  <div class="form-card">
+
+    <div class="form-header">
+
+      <span aria-hidden="true">👤</span>
+
+      <div>
+        <h1>
+          {% if cliente %}
+            Editar Cliente
+          {% else %}
+            Novo Cliente
+          {% endif %}
+        </h1>
+
+        <p>
+          {% if cliente %}
+            Atualize as informações do cliente
+          {% else %}
+            Preencha os dados para cadastrar um cliente
+          {% endif %}
+        </p>
+      </div>
+
+    </div>
+
+    <form method="POST" class="client-form">
+
+      <div class="form-group">
+        <label for="nome">Nome completo</label>
+        <input 
+          type="text" 
+          id="nome"
+          name="nome"
+          value="{{ cliente.nome if cliente else '' }}"
+          placeholder="Digite nome do cliente"
+          minlength="3"
+          maxlength="100"
+          autocomplete="name"
+          required 
+          >
+      </div>
+
+      <div class="form-group">
+        <label for="telefone">Telefone</label>
+        <input 
+          type="tel"  
+          id="telefone"
+          name="telefone"
+          value="{{ cliente.telefone if cliente else '' }}"
+          placeholder="(00) 00000-0000" 
+          maxlength="20"
+          autocomplete="tel"
+          required
+          >
+      </div>
+
+      <div class="form-actions">
+
+        <a href="{{ url_for('web.clientes') }}" class="button btn-cancelar">
+          Cancelar
+        </a>
+        <button type="submit" class="button btn-entrar">
+          {% if cliente %}
+            Salvar Alterações
+          {% else %}
+            Cadastrar Cliente
+          {% endif %}
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</section>
+
+{% endblock %}

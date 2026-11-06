@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}Clientes{% endblock %}
+
+{% block content %}
+
+<section class="page-container">
+
+  <div class="page-header">
+
+    <div>
+      <a href="{{ url_for('web.painel') }}" class="back-link">
+        ← Voltar ao Menu
+      </a>
+
+      <h1 class="page-title">
+        <span aria-hidden="true">👥</span>
+        Clientes
+      </h1>
+
+      <p class="page-description">
+        Gerencie os clientes cadastrados no sistema.
+      </p>
+    </div>
+
+    <a href="{{ url_for('web.novo_cliente') }}" class="button button-primary">
+      + Novo Cliente
+    </a>
+
+  </div>
+
+  <div class="table-container">
+
+    {% if clientes %}
+
+      <table class="data-table">
+
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Telefone</th>
+            <th class="actions-column">Ações</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          {% for cliente in clientes %}
+
+            <tr>
+              <td>{{ cliente.nome }}</td>
+
+              <td>{{ cliente.telefone }}</td>
+
+              <td class="table-actions">
+                <a
+                    href="{{ url_for('web.editar_cliente', cliente_id=cliente.id) }}"
+                    class="action-button edit-button"
+                    aria-label="Editar {{ cliente.nome }}"
+                    title="Editar cliente"
+                >Editar</a>
+
+                <form
+                  action="{{ url_for('web.excluir_cliente', cliente_id=cliente.id) }}"
+                  method="POST"
+                  class="delete-form"
+                  onsubmit="return confirm('Deseja realmente excluir este cliente?');"
+                >
+
+                  <button
+                      type="submit"
+                      class="action-button delete-button"
+                  >Excluir</button>
+
+                </form>
+
+                </td>
+            </tr>
+
+          {% endfor %}
+
+        </tbody>
+
+      </table>
+
+    {% else %}
+
+      <div class="empty-state">
+
+        <span aria-hidden="true">👥</span>
+
+        <h2>Nenhum cliente cadastrado</h2>
+
+        <p>Comece cadastrando o primeiro cliente.</p>
+
+        <a href="{{ url_for('web.novo_cliente') }}" class="button button-primary">
+          Cadastrar primeiro cliente
+        </a>
+
+      </div>
+
+    {% endif %}
+
+  </div>
+
+  {% if clientes %}
+    <p class="table-summary">
+      Total de clientes: <strong>{{ clientes|length }}</strong>
+    </p>
+  {% endif %}
+
+</section>
+
+{% endblock %}
