@@ -9,7 +9,7 @@
   <div class="page-header">
 
     <div>
-      <a href="{{ url_for('web.painel') }}" class="back-link">
+      <a href="{{ url_for('web.painel') }}" class="menu-voltar">
         ← Voltar ao Menu
       </a>
 
@@ -66,6 +66,8 @@
                   class="delete-form"
                   onsubmit="return confirm('Deseja realmente excluir este cliente?');"
                 >
+
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
                   <button
                       type="submit"

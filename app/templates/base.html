@@ -24,9 +24,13 @@
         </span>
 
         <form action="{{ url_for('web.sair') }}" method="POST">
+
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
           <button type="submit" class="btn-sair" aria-label="Sair do sistema" title="Sair">
             <span aria-hidden="true">⇥</span>
           </button>
+          
         </form>
       </div>
 

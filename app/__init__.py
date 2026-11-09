@@ -1,7 +1,7 @@
-from flask import Flask, jsonify, redirect, request, url_for
+from flask import Flask, jsonify, redirect, url_for, request
 
 from config import Config
-from app.extensions import db, login_manager
+from app.extensions import db, login_manager, csrf
 from app import models
 from app.routes.cliente_route import cliente_bp
 from app.routes.pedido_route import pedido_bp
@@ -33,13 +33,14 @@ def create_app(test_config=None):
   if test_config is not None:
     app.config.update(test_config)
 
-  # inicializa o SQLAlchemy
   db.init_app(app)
 
   login_manager.init_app(app)
   login_manager.login_view = 'web.login'
   login_manager.login_message = 'Faça login para acessar está página'
   login_manager.login_message_category = 'warning'
+
+  csrf.init_app(app)
 
   # registra as rotas
   app.register_blueprint(cliente_bp)

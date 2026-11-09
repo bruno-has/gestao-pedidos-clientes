@@ -42,6 +42,8 @@
 
     <form method="POST" class="client-form">
 
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
       <div class="form-group">
         <label for="nome">Nome completo</label>
         <input 
