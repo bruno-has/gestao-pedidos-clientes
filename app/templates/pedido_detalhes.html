@@ -12,7 +12,13 @@
       <p>Confira os dados e acompanhe o andamento da produção.</p>
     </div>
 
-    <a href="{{ url_for('web.pedidos') }}" class="btn-voltar">Voltar aos pedidos</a>
+    <div class="detalhes-pedido-acoes">
+      
+      <a href="{{ url_for('web.editar_pedido', pedido_id=pedido.id) }}" class="btn-editar-pedido">Editar pedido</a>
+
+      <a href="{{ url_for('web.pedidos') }}" class="btn-voltar">Voltar aos pedidos</a>
+
+    </div>
   </div>
 
   <section class="detalhes-pedido-card">
@@ -146,7 +152,7 @@
             {% endif %}
           >Concluído</option>
         </select>
-        
+
       </div>
 
       <button type="submit" class="btn-atualizar-status">Atualizar status</button>

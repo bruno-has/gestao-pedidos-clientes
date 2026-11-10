@@ -53,10 +53,14 @@ def atualizar_pedido(pedido_id, cliente_id, data_retirada, observacoes, itens):
   pedido.cliente_id = cliente_id
   pedido.data_retirada = data_retirada
   pedido.observacoes = observacoes
-
   pedido.itens.clear()
+
   for item in itens:
-    novo_item = ItemPedido(nome_produto=item['nome_produto'], quantidade=item['quantidade'], valor_unitario=item['valor_unitario'])
+    novo_item = ItemPedido(
+      nome_produto=item['nome_produto'], 
+      quantidade=item['quantidade'], 
+      valor_unitario=item['valor_unitario']
+    )
     pedido.itens.append(novo_item)
 
   db.session.commit()

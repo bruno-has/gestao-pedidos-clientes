@@ -16,6 +16,7 @@ from app.services.pedido_service import (
   cadastrar_pedido,
   listar_pedidos,
   buscar_pedido_por_id,
+  atualizar_pedido,
   atualizar_status_pedido,
   listar_pedidos_por_cliente
 )
@@ -334,6 +335,129 @@ def atualizar_status_pedido_web(pedido_id):
 
   flash('Status do pedido alterado com sucesso', 'success')
   return redirect(url_for('web.detalhes_pedido', pedido_id=pedido_id))
+
+@login_required
+def editar_pedido(pedido_id):
+  pedido = buscar_pedido_por_id(pedido_id)
+  if pedido is None:
+    flash('Pedido não encontrado', 'warning')
+    return redirect(url_for('web.pedidos'))
+
+  clientes = listar_clientes()
+
+  if request.method == 'POST':
+    try:
+      cliente_id = int(request.form.get('cliente_id', ''))
+      if cliente_id <= 0:
+        raise ValueError
+
+    except (ValueError, TypeError):
+      flash('Selecione um cliente válido', 'warning')
+      return render_template(
+        'pedido_editar.html', 
+        pedido=pedido, 
+        clientes=clientes
+      )
+
+    cliente = buscar_cliente_por_id(cliente_id)
+    if cliente is None:
+      flash('O cliente selecionado não existe', 'warning')
+      return render_template(
+        'pedido_editar.html',
+        pedido=pedido, 
+        clientes=clientes
+      )
+
+    try:
+      data_retirada = datetime.strptime(
+        request.form.get('data_retirada', ''), '%Y-%m-%dT%H:%M'
+      )
+
+    except ValueError:
+      flash('Informe uma data de retirada válida', 'warning')
+      return render_template(
+        'pedido_editar.html',
+        pedido=pedido,
+        clientes=clientes
+      )
+
+    nomes = request.form.getlist('nome_produto[]')
+    quantidades = request.form.getlist('quantidade[]')
+    valores = request.form.getlist('valor_unitario[]')
+
+    if not nomes or not (len(nomes) == len(quantidades) == len(valores)):
+      flash('Informe pelo menos um item válido', 'warning')
+      return render_template(
+        'pedido_editar.html',
+        pedido=pedido,
+        clientes=clientes
+      )
+
+    itens = []
+
+    try:
+      for nome, quantidade, valor in zip(nomes, quantidades, valores):
+        nome = nome.strip()
+        if not nome or len(nome) > 100:
+          raise ValueError
+
+        quantidade = int(quantidade)
+        if quantidade <= 0:
+          raise ValueError
+
+        valor = Decimal(valor)
+        if (
+          not valor.is_finite()
+          or valor <= 0
+          or valor >= Decimal('100000000')
+          or valor.as_tuple().exponent < -2
+        ):
+          raise ValueError
+
+        itens.append({
+          'nome_produto': nome,
+          'quantidade': quantidade,
+          'valor_unitario': valor
+        })
+
+    except (ValueError, TypeError, InvalidOperation):
+      flash('Confira os produtos, quantidades e valores informados', 'warning')
+      return render_template(
+        'pedido_editar.html',
+        pedido=pedido,
+        clientes=clientes
+      )
+
+    observacoes = request.form.get('observacoes', '').strip()
+
+    resultado = atualizar_pedido(
+      pedido_id,
+      cliente_id,
+      data_retirada,
+      observacoes,
+      itens
+    )
+
+    if resultado is None:
+      flash('Pedido não encontrado')
+      return redirect(url_for('web.pedidos'))
+
+    if resultado is False:
+      flash('O cliente selecionado não existe', 'warning')
+      return render_template(
+        'pedido_editar.html',
+        pedido=pedido,
+        clientes=clientes
+      )
+
+    flash('Pedido atualizado com sucesso', 'success')
+    return redirect(url_for('web.detalhes_pedido', pedido_id=pedido_id))
+
+  return render_template(
+    'pedido_editar.html',
+    pedido=pedido,
+    clientes=clientes
+  )
 
 @login_required
 def sair():
