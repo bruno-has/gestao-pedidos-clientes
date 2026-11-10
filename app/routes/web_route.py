@@ -9,6 +9,8 @@ from app.controllers.web_controller import (
   excluir_cliente_web,
   pagina_pedidos,
   pagina_novo_pedido,
+  detalhes_pedido,
+  atualizar_status_pedido_web,
   sair
 )
 
@@ -27,6 +29,8 @@ web_bp.add_url_rule(
   view_func=painel, 
   methods=['GET']
 )
+
+# -=-=-=-=-=- CLIENTES -=-=-=-=-=- #
 
 web_bp.add_url_rule(
   '/painel/clientes', 
@@ -56,6 +60,8 @@ web_bp.add_url_rule(
   methods=['POST']
 )
 
+# -=-=-=-=-=- PEDIDOS -=-=-=-=-=- #
+
 web_bp.add_url_rule(
   '/painel/pedidos', 
   endpoint='pedidos', 
@@ -67,7 +73,21 @@ web_bp.add_url_rule(
   '/painel/pedidos/novo', 
   endpoint='novo_pedido', 
   view_func=pagina_novo_pedido, 
+  methods=['GET', 'POST']
+)
+
+web_bp.add_url_rule(
+  '/painel/pedidos/<int:pedido_id>',
+  endpoint='detalhes_pedido',
+  view_func=detalhes_pedido,
   methods=['GET']
+)
+
+web_bp.add_url_rule(
+  '/painel/pedidos/<int:pedido_id>/status',
+  endpoint='atualizar_status_pedido',
+  view_func=atualizar_status_pedido_web,
+  methods=['POST']
 )
 
 web_bp.add_url_rule(

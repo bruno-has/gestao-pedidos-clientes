@@ -1,0 +1,111 @@
+{% extends 'base.html' %} 
+
+{% block title %}Pedidos{% endblock %} 
+
+{% block content %}
+
+<div class="pedidos-container">
+
+  <div class="pedidos-cabecalho">
+    <div>
+      <h1>Pedidos</h1>
+      <p>Consulte os pedidos e acompanhe as retiradas.</p>
+    </div>
+
+    <a href="{{ url_for('web.novo_pedido') }}" class="btn-novo-pedido">+ Novo pedido</a>
+  </div>
+
+  {% if pedidos %}
+
+  <div class="pedidos-resumo">
+    <span>
+      {{ pedidos|length }} {% if pedidos|length == 1 %} pedido cadastrado {%
+      else %} pedidos cadastrados {% endif %}
+    </span>
+  </div>
+
+  <div class="pedidos-tabela-container">
+    <table class="pedidos-tabela">
+      <thead>
+        <tr>
+          <th>Nº</th>
+          <th>Cliente</th>
+          <th>Retirada</th>
+          <th>Produtos</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for registro in pedidos %} {% set pedido = registro.pedido %}
+
+        <tr>
+
+          <td data-label="Nº">#{{ pedido.id }}</td>
+
+          <td data-label="Cliente">
+            <strong>{{ pedido.cliente.nome }}</strong>
+            <small>{{ pedido.cliente.telefone }}</small>
+          </td>
+
+          <td data-label="Retirada">
+            {{ pedido.data_retirada.strftime('%d/%m/%Y') }}
+            <small>{{ pedido.data_retirada.strftime('%H:%M') }}</small>
+          </td>
+
+          <td data-label="Produtos">
+            {% for item in pedido.itens %}
+            <div class="pedido-produto-lista">
+              {{ item.quantidade }}x {{ item.nome_produto }}
+            </div>
+            {% endfor %}
+          </td>
+
+          <td data-label="Total">
+            <strong>
+              R$ {{ "%.2f"|format(registro.total)|replace('.', ',') }}
+            </strong>
+          </td>
+
+          <td data-label="Status">
+            {% if pedido.status == 'pendente' %}
+            <span class="status-pedido status-pendente"> Pendente </span>
+
+            {% elif pedido.status == 'em produção' %}
+            <span class="status-pedido status-producao"> Em produção </span>
+
+            {% elif pedido.status == 'concluído' %}
+            <span class="status-pedido status-concluido"> Concluído </span>
+
+            {% else %}
+            <span class="status-pedido"> {{ pedido.status }} </span>
+            {% endif %}
+          </td>
+
+          <td data-label="Ações">
+            <a href="{{ url_for('web.detalhes_pedido', pedido_id=pedido.id) }}" class="btn-ver-pedido">Ver Detalhes</a>
+          </td>
+
+        </tr>
+
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% else %}
+
+  <div class="pedidos-vazio">
+    <h2>Nenhum pedido cadastrado</h2>
+
+    <p>Quando você cadastrar um pedido, ele aparecerá nesta página.</p>
+
+    <a href="{{ url_for('web.novo_pedido') }}" class="btn-novo-pedido">Cadastrar primeiro pedido</a>
+  </div>
+
+  {% endif %}
+</div>
+
+{% endblock %}

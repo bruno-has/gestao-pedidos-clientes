@@ -1,3 +1,6 @@
+from datetime import datetime
+from decimal import Decimal, InvalidOperation
+
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import current_user, login_user, logout_user, login_required
 
@@ -8,6 +11,12 @@ from app.services.cliente_service import (
   buscar_cliente_por_id,
   atualizar_cliente,
   excluir_cliente
+)
+from app.services.pedido_service import (
+  cadastrar_pedido,
+  listar_pedidos,
+  buscar_pedido_por_id,
+  atualizar_status_pedido
 )
 
 def login_page():
@@ -116,19 +125,185 @@ def excluir_cliente_web(cliente_id):
 @login_required
 def pagina_pedidos():
 
+  pedidos = listar_pedidos()
+
+  pedidos_com_total = []
+
+  for pedido in pedidos:
+    total = sum(
+      (
+        item.quantidade * item.valor_unitario
+        for item in pedido.itens
+      ), Decimal('0.00'))
+    
+    pedidos_com_total.append({
+      'pedido': pedido,
+      'total': total
+    })
+
+  return render_template('pedidos.html', pedidos=pedidos_com_total)
+
+@login_required
+def exibir_formulario_pedido(form_data=None):
+
+  clientes = listar_clientes()
+
   return render_template(
-    'em_desenvolvimento.html',
-    titulo='Pedidos',
-    descricao='Aqui ficará a listagem e o acompanhamento dos pedidos'
+    'pedido_form.html',
+    clientes=clientes,
+    form_data=form_data
   )
 
 @login_required
 def pagina_novo_pedido():
-  return render_template(
-    'em_desenvolvimento.html',
-    titulo='Novo Pedido',
-    descricao='Aqui ficará o formulário de cadastro de novos pedidos'
+
+  if request.method == 'POST':
+    cliente_id_texto = request.form.get('cliente_id', '').strip()
+    data_retirada_texto = request.form.get('data_retirada', '').strip()
+    observacoes = request.form.get('observacoes', '').strip()
+
+    try:
+      cliente_id = int(cliente_id_texto)
+      if cliente_id <= 0:
+        raise ValueError
+
+    except (ValueError, TypeError):
+      flash('Selecione um cliente válido', 'warning')
+      return exibir_formulario_pedido(request.form)
+
+    try:
+      data_retirada = datetime.strptime(
+        data_retirada_texto, 
+        '%Y-%m-%dT%H:%M'
+      )
+
+    except ValueError:
+      flash('Informe uma data e horário de retirada válidos', 'warning')
+      return exibir_formulario_pedido(request.form)
+
+    nomes = request.form.getlist('nome_produto[]')
+    quantidades = request.form.getlist('quantidade[]')
+    valores = request.form.getlist('valor_unitario[]')
+
+    if not (len(nomes) == len(quantidades) == len(valores)):
+      flash('Os dados dos itens do pedido estão inconsistentes', 'warning')
+      return exibir_formulario_pedido(request.form)
+
+    itens = []
+
+    for nome, quantidade_texto, valor_texto in zip(
+      nomes, 
+      quantidades, 
+      valores
+    ):
+      nome = nome.strip()
+      quantidade_texto = quantidade_texto.strip()
+      valor_texto = valor_texto.strip()
+
+      if not nome and not quantidade_texto and not valor_texto:
+        continue
+
+      if not nome or not quantidade_texto or not valor_texto:
+        flash('Preencha todos os campos de cada item', 'warning')
+        return exibir_formulario_pedido(request.form)
+
+      if len(nome) > 100: 
+        flash('O nome do produto deve ter até 100 caracteres', 'warning')
+        return exibir_formulario_pedido(request.form)
+
+      try:
+        quantidade = int(quantidade_texto)
+        if quantidade <= 0:
+          raise ValueError
+
+      except (ValueError, TypeError):
+        flash('A quantidade de cada item deve ser um inteiro positivo', 'warning')
+        return exibir_formulario_pedido(request.form)
+
+      try:
+        valor_unitario = Decimal(valor_texto)
+        
+        if (
+          not valor_unitario.is_finite()
+          or valor_unitario <= 0
+          or valor_unitario >= Decimal('100000000') 
+          or valor_unitario.as_tuple().exponent < -2
+        ):
+          raise InvalidOperation
+
+      except (InvalidOperation, ValueError):
+        flash('Informe um valor unitário positivo com no máximo duas casas decimais', 'warning')
+        return exibir_formulario_pedido(request.form)
+
+      itens.append({
+        'nome_produto': nome, 
+        'quantidade': quantidade,
+        'valor_unitario': valor_unitario
+      })
+
+    if not itens:
+      flash('Adicione pelo menos um item ao pedido', 'warning')
+      return exibir_formulario_pedido(request.form)
+
+    pedido = cadastrar_pedido(
+      cliente_id=cliente_id, 
+      data_retirada=data_retirada, 
+      observacoes=observacoes, 
+      itens=itens
+    )
+
+    if pedido is None:
+      flash('O cliente selecionado não foi encontrado', 'warning')
+      return exibir_formulario_pedido(request.form)
+
+    flash('Pedido cadastrado com sucesso', 'success')
+
+    return redirect(url_for('web.pedidos'))
+
+  return exibir_formulario_pedido()
+
+@login_required
+def detalhes_pedido(pedido_id):
+  pedido = buscar_pedido_por_id(pedido_id)
+
+  if pedido is None:
+    flash('Pedido não encontrado', 'warning')
+    return redirect(url_for('web.pedidos'))
+
+  total = sum(
+    (
+      item.quantidade * item.valor_unitario
+      for item in pedido.itens
+    ), Decimal('0.00')
   )
+
+  return render_template(
+    'pedido_detalhes.html', 
+    pedido=pedido,
+    total=total
+  )
+
+@login_required 
+def atualizar_status_pedido_web(pedido_id):
+  status = request.form.get('status', '').strip()
+
+  status_permitido = [
+    'pendente', 
+    'em produção', 
+    'concluído'
+  ]
+
+  if status not in status_permitido:
+    flash('Selecione um status válido', 'warning')
+    return redirect(url_for('web.detalhes_pedido', pedido_id=pedido_id))
+
+  pedido = atualizar_status_pedido(pedido_id, status)
+  if pedido is None:
+    flash('Pedido não encontrado', 'warning')
+    return redirect(url_for('web.pedidos'))
+
+  flash('Status do pedido alterado com sucesso', 'success')
+  return redirect(url_for('web.detalhes_pedido', pedido_id=pedido_id))
 
 @login_required
 def sair():

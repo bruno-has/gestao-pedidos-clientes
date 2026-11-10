@@ -1,0 +1,159 @@
+{% extends 'base.html' %} 
+
+{% block title %}Detalhes do Pedido #{{ pedido.id }}{%endblock %} 
+
+{% block content %}
+
+<div class="detalhes-pedido-container">
+
+  <div class="detalhes-pedido-cabecalho">
+    <div>
+      <h1>Pedido #{{ pedido.id }}</h1>
+      <p>Confira os dados e acompanhe o andamento da produção.</p>
+    </div>
+
+    <a href="{{ url_for('web.pedidos') }}" class="btn-voltar">Voltar aos pedidos</a>
+  </div>
+
+  <section class="detalhes-pedido-card">
+    <h2>Informações do pedido</h2>
+
+    <div class="detalhes-pedido-grid">
+      <div class="detalhes-pedido-info">
+        <span>Cliente</span>
+        <strong>{{ pedido.cliente.nome }}</strong>
+      </div>
+
+      <div class="detalhes-pedido-info">
+        <span>Telefone</span>
+        <strong>{{ pedido.cliente.telefone }}</strong>
+      </div>
+
+      <div class="detalhes-pedido-info">
+        <span>Data do pedido</span>
+        <strong>{{ pedido.data_pedido.strftime('%d/%m/%Y %H:%M') }}</strong>
+      </div>
+
+      <div class="detalhes-pedido-info">
+        <span>Data de retirada</span>
+        <strong>{{ pedido.data_retirada.strftime('%d/%m/%Y %H:%M') }}</strong>
+      </div>
+    </div>
+
+    {% if pedido.observacoes %}
+
+    <div class="detalhes-pedido-observacoes">
+      <span>Observações</span>
+      <p>{{ pedido.observacoes }}</p>
+    </div>
+
+    {% endif %}
+  </section>
+
+  <section class="detalhes-pedido-card">
+    <h2>Itens do pedido</h2>
+
+    <div class="detalhes-itens-tabela-container">
+      <table class="detalhes-itens-tabela">
+        <thead>
+          <tr>
+            <th>Produto</th>
+            <th>Quantidade</th>
+            <th>Valor unitário</th>
+            <th>Subtotal</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for item in pedido.itens %}
+
+          <tr>
+            <td data-label="Produto">{{ item.nome_produto }}</td>
+
+            <td data-label="Quantidade">{{ item.quantidade }}</td>
+
+            <td data-label="Valor unitário">
+              R$ {{ "%.2f"|format(item.valor_unitario)|replace('.', ',') }}
+            </td>
+
+            <td data-label="Subtotal">
+              R$ {{ "%.2f"|format(item.quantidade *
+              item.valor_unitario)|replace('.', ',') }}
+            </td>
+          </tr>
+
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="detalhes-pedido-total">
+      <span>Total do pedido</span>
+      <strong> R$ {{ "%.2f"|format(total)|replace('.', ',') }} </strong>
+    </div>
+  </section>
+
+  <section class="detalhes-pedido-card">
+    <h2>Acompanhamento da produção</h2>
+
+    <p class="detalhes-pedido-descricao">
+      Atualize o status conforme o andamento do pedido.
+    </p>
+
+    <div class="detalhes-status-atual">
+      <span>Status atual</span>
+
+      {% if pedido.status == 'pendente' %}
+      <span class="status-pedido status-pendente"> Pendente </span>
+
+      {% elif pedido.status == 'em produção' %}
+      <span class="status-pedido status-producao"> Em produção </span>
+
+      {% elif pedido.status == 'concluído' %}
+      <span class="status-pedido status-concluido"> Concluído </span>
+      {% endif %}
+    </div>
+
+    <form
+      method="POST"
+      action="{{ url_for('web.atualizar_status_pedido', pedido_id=pedido.id) }}"
+      class="form-atualizar-status">
+
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+      <div class="pedido-campo">
+        <label for="status">Novo status</label>
+
+        <select name="status" id="status" required>
+          <option
+            value="pendente" 
+            {% if pedido.status == "pendente" %} 
+            selected
+            {% endif %}
+          >Pendente</option>
+
+          <option
+            value="em produção"
+            {% if pedido.status == "em produção" %}
+            selected
+            {% endif %}
+          >Em produção</option>
+
+          <option
+            value="concluído"
+            {% if pedido.status == "concluído" %}
+            selected
+            {% endif %}
+          >Concluído</option>
+        </select>
+        
+      </div>
+
+      <button type="submit" class="btn-atualizar-status">Atualizar status</button>
+
+    </form>
+
+  </section>
+</div>
+
+{% endblock %}
