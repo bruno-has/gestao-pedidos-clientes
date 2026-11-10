@@ -6,6 +6,7 @@ from app.controllers.web_controller import (
   pagina_clientes,
   novo_cliente,
   editar_cliente,
+  detalhes_cliente,
   excluir_cliente_web,
   pagina_pedidos,
   pagina_novo_pedido,
@@ -51,6 +52,13 @@ web_bp.add_url_rule(
   endpoint='editar_cliente',
   view_func=editar_cliente,
   methods=['GET', 'POST']
+)
+
+web_bp.add_url_rule(
+  '/painel/clientes/<int:cliente_id>',
+  endpoint='detalhes_cliente',
+  view_func=detalhes_cliente,
+  methods=['GET']
 )
 
 web_bp.add_url_rule(

@@ -16,7 +16,8 @@ from app.services.pedido_service import (
   cadastrar_pedido,
   listar_pedidos,
   buscar_pedido_por_id,
-  atualizar_status_pedido
+  atualizar_status_pedido,
+  listar_pedidos_por_cliente
 )
 
 def login_page():
@@ -105,6 +106,35 @@ def editar_cliente(cliente_id):
     return redirect(url_for('web.clientes'))
 
   return render_template('cliente_form.html', cliente=cliente) 
+
+@login_required
+def detalhes_cliente(cliente_id):
+  cliente = buscar_cliente_por_id(cliente_id)
+  if cliente is None:
+    flash('Cliente não encontrado', 'warning')
+    return redirect(url_for('web.clientes'))
+
+  pedidos = listar_pedidos_por_cliente(cliente_id)
+  pedidos_com_total = []
+
+  for pedido in pedidos:
+    total = sum(
+      (
+        item.quantidade * item.valor_unitario
+        for item in pedido.itens
+      ), Decimal('0.00')
+    )
+
+    pedidos_com_total.append({
+      'pedido': pedido,
+      'total': total
+    })
+
+  return render_template(
+    'cliente_detalhes.html',
+    cliente=cliente,
+    pedidos=pedidos_com_total
+  )
 
 @login_required
 def excluir_cliente_web(cliente_id):

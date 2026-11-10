@@ -53,11 +53,14 @@
               <td>{{ cliente.telefone }}</td>
 
               <td class="table-actions">
+
+                <a href="{{ url_for('web.detalhes_cliente', cliente_id=cliente.id) }}" class="btn-ver-pedido">Ver Histórico</a>
+
                 <a
-                    href="{{ url_for('web.editar_cliente', cliente_id=cliente.id) }}"
-                    class="action-button edit-button"
-                    aria-label="Editar {{ cliente.nome }}"
-                    title="Editar cliente"
+                  href="{{ url_for('web.editar_cliente', cliente_id=cliente.id) }}"
+                  class="action-button edit-button"
+                  aria-label="Editar {{ cliente.nome }}"
+                  title="Editar cliente"
                 >Editar</a>
 
                 <form

@@ -1,0 +1,120 @@
+{% extends 'base.html' %} 
+
+{% block title %}Detalhes do Cliente{% endblock %} 
+
+{% block content %}
+
+<div class="cliente-detalhes-container">
+
+  <div class="cliente-detalhes-cabecalho">
+    <div>
+      <h1>Detalhes do cliente</h1>
+      <p>Consulte os dados e o histórico de pedidos.</p>
+    </div>
+
+    <a href="{{ url_for('web.clientes') }}" class="btn-voltar">Voltar aos clientes</a>
+  </div>
+
+  <section class="cliente-detalhes-card">
+    <h2>Informações do cliente</h2>
+
+    <div class="cliente-detalhes-grid">
+      <div class="cliente-detalhes-info">
+        <span>Nome</span>
+        <strong>{{ cliente.nome }}</strong>
+      </div>
+
+      <div class="cliente-detalhes-info">
+        <span>Telefone</span>
+        <strong>{{ cliente.telefone }}</strong>
+      </div>
+    </div>
+
+    <div class="cliente-detalhes-acoes">
+      <a href="{{ url_for('web.editar_cliente', cliente_id=cliente.id) }}" class="btn-editar">Editar cliente</a>
+
+      <a href="{{ url_for('web.novo_pedido') }}" class="btn-novo-pedido">Novo pedido</a>
+    </div>
+  </section>
+
+  <section class="cliente-detalhes-card">
+    <div class="cliente-historico-cabecalho">
+      <div>
+        <h2>Histórico de pedidos</h2>
+        <p>Pedidos realizados por este cliente.</p>
+      </div>
+
+      <span class="cliente-total-pedidos">
+        {{ pedidos|length }} {% if pedidos|length == 1 %} pedido {% else %}
+        pedidos {% endif %}
+      </span>
+    </div>
+
+    {% if pedidos %}
+
+    <div class="cliente-historico-tabela-container">
+      <table class="cliente-historico-tabela">
+        <thead>
+          <tr>
+            <th>Pedido</th>
+            <th>Data de retirada</th>
+            <th>Itens</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for registro in pedidos %} {% set pedido = registro.pedido %}
+
+          <tr>
+            <td data-label="Pedido">#{{ pedido.id }}</td>
+
+            <td data-label="Data de retirada">
+              {{ pedido.data_retirada.strftime('%d/%m/%Y') }} às {{
+              pedido.data_retirada.strftime('%H:%M') }}
+            </td>
+
+            <td data-label="Itens">{{ pedido.itens|length }}</td>
+
+            <td data-label="Total">R$ {{ "%.2f"|format(registro.total)|replace('.', ',') }}</td>
+
+            <td data-label="Status">
+              <span class="status-pedido
+                {% if pedido.status == 'pendente' %} 
+                  status-pendente 
+                {% elif pedido.status == 'em produção' %} 
+                  status-em-producao 
+                {% else %}
+                  status-concluido 
+                {% endif %}">{{ pedido.status|capitalize }}
+              </span>
+            </td>
+
+            <td data-label="Ações">
+              <a href="{{ url_for('web.detalhes_pedido', pedido_id=pedido.id) }}" class="btn-ver-pedido">Ver pedido</a>
+            </td>
+          </tr>
+
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% else %}
+
+    <div class="cliente-historico-vazio">
+      <span aria-hidden="true">📋</span>
+
+      <h3>Nenhum pedido encontrado</h3>
+
+      <p>Este cliente ainda não possui pedidos cadastrados.</p>
+    </div>
+
+    {% endif %}
+  </section>
+
+</div>
+
+{% endblock %}
