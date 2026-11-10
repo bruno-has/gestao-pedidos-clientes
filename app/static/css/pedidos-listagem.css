@@ -1,0 +1,163 @@
+/* -=-=-=-=-=- LISTAGEM DE PEDIDOS -=-=-=-=-=- */
+
+.pedidos-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.pedidos-cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.pedidos-cabecalho h1 {
+  margin-bottom: 6px;
+}
+
+.pedidos-cabecalho p {
+  margin: 0;
+  color: #666;
+}
+
+.btn-novo-pedido {
+  display: inline-block;
+  padding: 11px 16px;
+  border-radius: 6px;
+  background: #2f88ad;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.btn-novo-pedido:hover {
+  background: #246d8b;
+}
+
+.pedidos-resumo {
+  margin-bottom: 15px;
+  color: #666;
+  font-size: 14px;
+}
+
+.pedidos-tabela-container {
+  width: 100%;
+  overflow-x: auto;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+}
+
+.pedidos-tabela {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.pedidos-tabela th,
+.pedidos-tabela td {
+  padding: 15px 12px;
+  border-bottom: 1px solid #e5e5e5;
+  vertical-align: middle;
+}
+
+.pedidos-tabela th {
+  background: #f5f5f5;
+  color: #333;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.pedidos-tabela tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.pedidos-tabela tbody tr:hover {
+  background: #fafafa;
+}
+
+.pedidos-tabela td small {
+  display: block;
+  margin-top: 4px;
+  color: #666;
+}
+
+.pedido-produto-lista {
+  margin-bottom: 5px;
+}
+
+.pedido-produto-lista:last-child {
+  margin-bottom: 0;
+}
+
+.status-pedido {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status-pendente {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-producao {
+  background: #cfe8f3;
+  color: #17536c;
+}
+
+.status-concluido {
+  background: #d4edda;
+  color: #155724;
+}
+
+.pedidos-vazio {
+  padding: 50px 20px;
+  text-align: center;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+}
+
+.pedidos-vazio h2 {
+  margin-top: 0;
+}
+
+.pedidos-vazio p {
+  margin-bottom: 22px;
+  color: #666;
+}
+
+@media (max-width: 850px) {
+  .pedidos-tabela-container {
+    overflow-x: auto;
+  }
+
+  .pedidos-tabela {
+    min-width: 850px;
+  }
+}
+
+@media (max-width: 550px) {
+  .pedidos-container {
+    padding: 12px;
+  }
+
+  .pedidos-cabecalho {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .btn-novo-pedido {
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+  }
+}

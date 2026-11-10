@@ -1,0 +1,62 @@
+/* -=-=-=-=-=- PAINEL PRINCIPAL -=-=-=-=-=- */
+
+.dashboard-container {
+  width: min(100%, 850px);
+  margin: 35px auto;
+}
+
+.dashboard-header {
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.dashboard-header h1 {
+  margin-bottom: 12px;
+  font-size: clamp(28px, 4vw, 38px);
+}
+
+.dashboard-header p {
+  color: var(--texto-secundario);
+  font-size: 21px;
+}
+
+.dashboard-menu {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+
+.menu-card {
+  min-height: 125px;
+  padding: 20px 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+
+  color: var(--azul-escuro);
+  background: linear-gradient(120deg, #e5f0fc, #d9e8fa);
+
+  border: 1px solid transparent;
+  border-radius: var(--raio);
+
+  font-size: 23px;
+  font-weight: 700;
+
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.menu-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--sombra);
+}
+
+.menu-principal {
+  color: var(--branco);
+  background: linear-gradient(110deg, var(--azul-principal), var(--azul-escuro));
+}
+
+.menu-icon {
+  font-size: 43px;
+}

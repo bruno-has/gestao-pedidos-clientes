@@ -1,0 +1,161 @@
+/* -=-=-=-=-=- TABELA DE CLIENTES -=-=-=-=-=- */
+
+.table-container {
+  overflow-x: auto;
+  background: var(--branco);
+  border: 1px solid var(--azul-borda);
+  border-radius: var(--raio);
+  box-shadow: var(--sombra);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.data-table th,
+.data-table td {
+  padding: 17px 20px;
+  border-bottom: 1px solid #dce5f0;
+}
+
+.data-table th {
+  color: var(--texto-principal);
+  background: #e5f0fc;
+  font-weight: 700;
+}
+
+.data-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tbody tr:hover {
+  background: #f7faff;
+}
+
+.actions-column {
+  width: 220px;
+}
+
+.table-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.delete-form {
+  margin: 0;
+}
+
+.action-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 7px 12px;
+  border: none;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.edit-button {
+  color: var(--azul-escuro);
+  background: var(--azul-claro);
+}
+
+.delete-button {
+  color: #a12a21;
+  background: #fde9e7;
+}
+
+.action-button:hover {
+  filter: brightness(0.95);
+}
+
+.table-summary {
+  margin-top: 15px;
+  color: var(--texto-secundario);
+  text-align: right;
+  font-size: 14px;
+}
+
+/* -=-=-=-=-=- ESTADO VAZIO -=-=-=-=-=- */
+
+.empty-state {
+  padding: 55px 20px;
+  text-align: center;
+}
+
+.empty-state > span {
+  font-size: 48px;
+}
+
+.empty-state h2 {
+  margin: 15px 0 8px;
+  font-size: 22px;
+}
+
+.empty-state p {
+  margin-bottom: 22px;
+  color: var(--texto-secundario);
+}
+
+/* -=-=-=-=-=- FORMULÁRIO DE CLIENTE -=-=-=-=-=- */
+
+.form-page {
+  max-width: 750px;
+}
+
+.form-card {
+  padding: 35px;
+  background: var(--branco);
+  border: 1px solid var(--azul-borda);
+  border-radius: var(--raio);
+  box-shadow: var(--sombra);
+}
+
+.form-heading {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.form-heading > span {
+  font-size: 40px;
+}
+
+.form-heading h1 {
+  font-size: 27px;
+}
+
+.form-heading p {
+  margin-top: 5px;
+  color: var(--texto-secundario);
+}
+
+.client-form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.button-secondary {
+  color: var(--azul-escuro);
+  background: var(--branco);
+  border-color: var(--azul-principal);
+}
+
+.button-secondary:hover {
+  background: var(--azul-claro);
+}

@@ -1,0 +1,224 @@
+/* -=-=-=-=-=- FORMULÁRIO DE PEDIDOS -=-=-=-=-=- */
+
+.pedido-container {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.pedido-cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.pedido-cabecalho h1 {
+  margin-bottom: 6px;
+}
+
+.pedido-cabecalho p,
+.pedido-itens-cabecalho p {
+  color: #666;
+  margin: 0;
+}
+
+.btn-voltar,
+.btn-cancelar {
+  display: inline-block;
+  padding: 10px 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  color: #333;
+  text-decoration: none;
+  background: #fff;
+}
+
+.pedido-secao {
+  background: #fff;
+  padding: 24px;
+  margin-bottom: 20px;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+}
+
+.pedido-secao h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+.pedido-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 18px;
+}
+
+.pedido-campo label {
+  font-weight: 600;
+  color: #333;
+}
+
+.pedido-campo input,
+.pedido-campo select,
+.pedido-campo textarea {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font: inherit;
+  box-sizing: border-box;
+}
+
+.pedido-campo input:focus,
+.pedido-campo select:focus,
+.pedido-campo textarea:focus {
+  outline: 2px solid #2f88ad;
+  border-color: #2f88ad;
+}
+
+.pedido-campo textarea {
+  resize: vertical;
+}
+
+.pedido-campo small {
+  color: #666;
+}
+
+.pedido-itens-cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.pedido-itens-cabecalho h2 {
+  margin-bottom: 6px;
+}
+
+.btn-adicionar,
+.btn-salvar-pedido {
+  border: none;
+  border-radius: 6px;
+  padding: 11px 16px;
+  background: #2f88ad;
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-adicionar:hover,
+.btn-salvar-pedido:hover {
+  background: #246d8b;
+}
+
+.pedido-item {
+  display: grid;
+  grid-template-columns: minmax(180px, 2fr) minmax(100px, 1fr) minmax(
+      130px,
+      1fr
+    ) auto;
+  align-items: end;
+  gap: 12px;
+  padding: 15px;
+  margin-bottom: 12px;
+  background: #f8f9fa;
+  border: 1px solid #e5e5e5;
+  border-radius: 7px;
+}
+
+.pedido-item .pedido-campo {
+  margin-bottom: 0;
+}
+
+.btn-remover-item {
+  padding: 10px 12px;
+  margin-bottom: 0;
+  border: 1px solid #dc3545;
+  border-radius: 6px;
+  background: #fff;
+  color: #dc3545;
+  cursor: pointer;
+}
+
+.btn-remover-item:hover {
+  background: #dc3545;
+  color: #fff;
+}
+
+.pedido-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  padding-top: 20px;
+  margin-top: 20px;
+  border-top: 1px solid #ddd;
+  font-size: 18px;
+}
+
+.pedido-total strong {
+  color: #2f88ad;
+  font-size: 22px;
+}
+
+.pedido-acoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin: 25px 0;
+}
+
+@media (max-width: 750px) {
+  .pedido-container {
+    padding: 12px;
+  }
+
+  .pedido-secao {
+    padding: 16px;
+  }
+
+  .pedido-item {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .produto-campo {
+    grid-column: 1 / -1;
+  }
+
+  .btn-remover-item {
+    align-self: end;
+  }
+}
+
+@media (max-width: 480px) {
+  .pedido-cabecalho,
+  .pedido-itens-cabecalho {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .pedido-item {
+    grid-template-columns: 1fr;
+  }
+
+  .produto-campo {
+    grid-column: auto;
+  }
+
+  .pedido-acoes {
+    flex-direction: column-reverse;
+  }
+
+  .pedido-acoes a,
+  .pedido-acoes button {
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+  }
+}

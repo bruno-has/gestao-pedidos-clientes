@@ -1,0 +1,53 @@
+/* -=-=-=-=-=- PÁGINAS PROVISÓRIAS -=-=-=-=-=- */
+
+.placeholder-container {
+  width: min(100%, 850px);
+  margin: 0 auto;
+}
+
+.menu-voltar {
+  display: inline-block;
+  margin-bottom: 25px;
+  padding: 9px 16px;
+  border-radius: 20px;
+  color: var(--azul-escuro);
+  background: var(--azul-claro);
+  font-weight: 700;
+}
+
+.menu-voltar:hover {
+  background: #d4e6f8;
+}
+
+.placeholder-card {
+  padding: 55px 25px;
+  border: 1px solid var(--azul-borda);
+  border-radius: var(--raio);
+  background: var(--branco);
+  box-shadow: var(--sombra);
+  text-align: center;
+}
+
+.placeholder-icon {
+  font-size: 50px;
+}
+
+.placeholder-card h1 {
+  margin: 15px 0;
+  font-size: 30px;
+}
+
+.placeholder-card p {
+  color: var(--texto-secundario);
+}
+
+.placeholder-label {
+  display: inline-block;
+  margin-top: 25px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  color: var(--azul-escuro);
+  background: var(--azul-claro);
+  font-size: 14px;
+  font-weight: 700;
+}

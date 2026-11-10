@@ -1,0 +1,208 @@
+/* -=-=-=-=-=- PAINEL - INDICADORES -=-=-=-=-=- */
+
+.dashboard-indicadores {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 18px;
+  margin: 28px 0;
+}
+
+.indicador-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 22px;
+  background-color: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.indicador-icone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background-color: #f0f0f0;
+  font-size: 24px;
+}
+
+.indicador-card p {
+  margin: 0 0 6px;
+  color: #666;
+  font-size: 14px;
+}
+
+.indicador-card strong {
+  color: #333;
+  font-size: 28px;
+}
+
+.indicador-pendente {
+  border-left: 4px solid #e0a12f;
+}
+
+.indicador-producao {
+  border-left: 4px solid #2f88ad;
+}
+
+.indicador-concluido {
+  border-left: 4px solid #32966b;
+}
+
+/* PRÓXIMAS RETIRADAS */
+
+.dashboard-retiradas,
+.dashboard-acessos {
+  margin-top: 32px;
+}
+
+.dashboard-secao-cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.dashboard-secao-cabecalho h2,
+.dashboard-acessos h2 {
+  margin: 0 0 6px;
+  color: #333;
+  font-size: 21px;
+}
+
+.dashboard-secao-cabecalho p {
+  margin: 0;
+  color: #777;
+  font-size: 14px;
+}
+
+.link-ver-todos {
+  color: #2f88ad;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.link-ver-todos:hover {
+  text-decoration: underline;
+}
+
+.dashboard-lista-retiradas {
+  display: grid;
+  gap: 12px;
+}
+
+.retirada-card {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  align-items: center;
+  gap: 16px;
+  padding: 18px;
+  background-color: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+}
+
+.retirada-informacoes,
+.retirada-data {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.retirada-informacoes strong {
+  color: #333;
+}
+
+.retirada-informacoes span,
+.retirada-data span {
+  color: #777;
+  font-size: 13px;
+}
+
+.retirada-data strong {
+  color: #333;
+}
+
+.retirada-status span {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 20px;
+  background-color: #f0f0f0;
+  color: #555;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.status-pendente {
+  background-color: #fff3d6 !important;
+  color: #936300 !important;
+}
+
+.status-em-produção {
+  background-color: #dceff8 !important;
+  color: #176486 !important;
+}
+
+.status-concluído {
+  background-color: #dff3e8 !important;
+  color: #23764e !important;
+}
+
+.btn-ver-pedido {
+  justify-self: start;
+  padding: 8px 13px;
+  border-radius: 6px;
+  background-color: #2f88ad;
+  color: #fff;
+  font-size: 13px;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.btn-ver-pedido:hover {
+  background-color: #246d8b;
+}
+
+.dashboard-vazio {
+  padding: 30px 15px;
+  border: 1px dashed #ccc;
+  border-radius: 8px;
+  text-align: center;
+  color: #777;
+}
+
+.dashboard-vazio span {
+  font-size: 30px;
+}
+
+.dashboard-vazio p {
+  margin-bottom: 0;
+}
+
+/* -=-=-=-=-=- ACESSO RÁPIDO -=-=-=-=-=- */
+
+.dashboard-acessos .dashboard-menu {
+  margin-top: 18px;
+}
+
+@media (max-width: 600px) {
+  .dashboard-secao-cabecalho {
+    align-items: flex-start;
+  }
+
+  .retirada-card {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .retirada-status,
+  .btn-ver-pedido {
+    grid-column: span 2;
+  }
+}
