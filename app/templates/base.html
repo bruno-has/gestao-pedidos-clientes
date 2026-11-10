@@ -18,6 +18,8 @@
       </a>
 
       <div class="header-user">
+        <a href="{{ url_for('web.relatorio') }}" class="btn-relatorio">Relatórios</a>
+
         <span class="msg-user">
           <span aria-hidden="true">👤</span>
           Olá, {{ current_user.nome }}!

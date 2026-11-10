@@ -1932,3 +1932,202 @@ button, input {
     grid-column: span 2;
   }
 }
+
+/* RELATÓRIO DE PEDIDOS */
+
+.relatorio-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.relatorio-header {
+  margin-bottom: 24px;
+}
+
+.relatorio-header h1 {
+  margin-bottom: 8px;
+}
+
+.relatorio-header p {
+  color: #666;
+}
+
+.relatorio-filtros,
+.relatorio-lista {
+  background: #fff;
+  padding: 24px;
+  border-radius: 10px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.relatorio-filtros h2,
+.relatorio-lista h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.filtros-campos {
+  display: flex;
+  align-items: end;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.filtros-campos .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-width: 180px;
+}
+
+.filtros-campos input {
+  width: 100%;
+  min-height: 42px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font: inherit;
+}
+
+.filtros-campos button {
+  min-height: 42px;
+}
+
+.relatorio-indicadores {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.relatorio-indicadores .indicador-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 22px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.indicador-titulo {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.indicador-card strong {
+  font-size: 1.7rem;
+  color: #2f88ad;
+}
+
+.relatorio-lista-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.relatorio-lista-header h2 {
+  margin: 0;
+}
+
+.relatorio-lista-header span {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.tabela-responsiva {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.tabela-relatorio {
+  width: 100%;
+  border-collapse: collapse;
+  white-space: nowrap;
+}
+
+.tabela-relatorio th,
+.tabela-relatorio td {
+  padding: 14px 12px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.tabela-relatorio th {
+  background: #f5f5f5;
+  font-weight: 600;
+}
+
+.tabela-relatorio tbody tr:hover {
+  background: #f9f9f9;
+}
+
+.relatorio-vazio {
+  padding: 30px 16px;
+  text-align: center;
+  color: #666;
+  background: #f8f8f8;
+  border-radius: 8px;
+}
+
+.mensagem-erro {
+  margin-bottom: 20px;
+  padding: 14px 16px;
+  color: #842029;
+  background: #f8d7da;
+  border: 1px solid #f5c2c7;
+  border-radius: 6px;
+}
+
+@media (max-width: 600px) {
+  .relatorio-container {
+    padding: 16px;
+  }
+
+  .relatorio-filtros,
+  .relatorio-lista {
+    padding: 16px;
+  }
+
+  .filtros-campos {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .filtros-campos button {
+    width: 100%;
+  }
+
+  .relatorio-indicadores {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .relatorio-lista-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+.btn-relatorio {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 14px;
+  border-radius: 6px;
+  background-color: #2f88ad;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.btn-relatorio:hover {
+  background-color: #246d8c;
+}

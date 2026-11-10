@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 from decimal import Decimal, InvalidOperation
 
 from flask import render_template, request, redirect, url_for, flash
@@ -19,6 +19,7 @@ from app.services.pedido_service import (
   atualizar_pedido,
   atualizar_status_pedido,
   listar_pedidos_por_cliente,
+  listar_pedidos_por_periodo,
   excluir_pedido
 )
 from app.models.pedido import Pedido
@@ -486,6 +487,88 @@ def excluir_pedido_web(pedido_id):
     flash('Pedido excluído com sucesso!', 'success')
 
   return redirect(url_for('web.pedidos'))
+
+
+@login_required
+def relatorio():
+  hoje = date.today()
+
+  # Define o período padrão: primeiro dia do mês até hoje.
+  primeiro_dia_mes = hoje.replace(day=1)
+
+  inicio_texto = request.args.get(
+    'data_inicio',
+    primeiro_dia_mes.isoformat()
+  )
+
+  fim_texto = request.args.get(
+    'data_fim',
+    hoje.isoformat()
+  )
+
+  erro = None
+  pedidos_com_total = []
+
+  total_pedidos = 0
+  valor_total = Decimal('0.00')
+
+  pedidos_pendentes = 0
+  pedidos_em_producao = 0
+  pedidos_concluidos = 0
+
+  try:
+    data_inicio = date.fromisoformat(inicio_texto)
+    data_fim = date.fromisoformat(fim_texto)
+
+    if data_inicio > data_fim:
+      raise ValueError(
+        'A data inicial não pode ser posterior à data final.'
+      )
+
+    pedidos = listar_pedidos_por_periodo(
+      data_inicio,
+      data_fim
+    )
+
+    for pedido in pedidos:
+      total_pedido = sum(
+        (
+          item.quantidade * item.valor_unitario
+          for item in pedido.itens
+        ), Decimal('0.00')
+      )
+
+      pedidos_com_total.append({
+        'pedido': pedido,
+        'total': total_pedido
+      })
+
+      valor_total += total_pedido
+
+      if pedido.status == 'pendente':
+        pedidos_pendentes += 1
+      elif pedido.status == 'em produção':
+        pedidos_em_producao += 1
+      elif pedido.status == 'concluído':
+        pedidos_concluidos += 1
+
+    total_pedidos = len(pedidos)
+
+  except ValueError as e:
+    erro = str(e)
+
+  return render_template(
+    'relatorio.html',
+    data_inicio=inicio_texto,
+    data_fim=fim_texto,
+    erro=erro,
+    pedidos_com_total=pedidos_com_total,
+    total_pedidos=total_pedidos,
+    valor_total=valor_total,
+    pedidos_pendentes=pedidos_pendentes,
+    pedidos_em_producao=pedidos_em_producao,
+    pedidos_concluidos=pedidos_concluidos
+  )
 
 @login_required
 def sair():

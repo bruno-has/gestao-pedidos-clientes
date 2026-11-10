@@ -14,6 +14,7 @@ from app.controllers.web_controller import (
   atualizar_status_pedido_web,
   editar_pedido,
   excluir_pedido_web,
+  relatorio,
   sair
 )
 
@@ -112,6 +113,13 @@ web_bp.add_url_rule(
   endpoint='excluir_pedido',
   view_func=excluir_pedido_web,
   methods=['POST']
+)
+
+web_bp.add_url_rule(
+  '/painel/relatorio',
+  endpoint='relatorio',
+  view_func=relatorio,
+  methods=['GET']
 )
 
 web_bp.add_url_rule(

@@ -1,3 +1,5 @@
+from datetime import datetime, time, timedelta
+
 from app.extensions import db
 from app.models.cliente import Cliente
 from app.models.pedido import Pedido
@@ -38,6 +40,17 @@ def listar_pedidos_por_cliente(cliente_id):
     return None
 
   return Pedido.query.filter_by(cliente_id=cliente_id).order_by(Pedido.data_retirada).all()
+
+def listar_pedidos_por_periodo(data_inicio, data_fim):
+  inicio = datetime.combine(data_inicio, time.min)
+  fim = datetime.combine(data_fim + timedelta(days=1), time.min)
+
+  return (
+    Pedido.query.filter(
+      Pedido.data_pedido >= inicio,
+      Pedido.data_pedido < fim
+    ).order_by(Pedido.data_pedido.desc()).all()
+  )
 
 def atualizar_pedido(pedido_id, cliente_id, data_retirada, observacoes, itens):
   pedido = db.session.get(Pedido, pedido_id)
