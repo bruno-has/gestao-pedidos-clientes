@@ -16,6 +16,14 @@
       
       <a href="{{ url_for('web.editar_pedido', pedido_id=pedido.id) }}" class="btn-editar-pedido">Editar pedido</a>
 
+      <form action="{{ url_for('web.excluir_pedido', pedido_id=pedido.id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir este pedido? Esta ação não poderá ser desfeita');">
+
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <button type="submit" class="btn-excluir-pedido">Excluir pedido</button>
+        
+      </form>
+
       <a href="{{ url_for('web.pedidos') }}" class="btn-voltar">Voltar aos pedidos</a>
 
     </div>

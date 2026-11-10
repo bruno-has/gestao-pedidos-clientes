@@ -13,6 +13,7 @@ from app.controllers.web_controller import (
   detalhes_pedido,
   atualizar_status_pedido_web,
   editar_pedido,
+  excluir_pedido_web,
   sair
 )
 
@@ -104,6 +105,13 @@ web_bp.add_url_rule(
   endpoint='editar_pedido',
   view_func=editar_pedido,
   methods=['GET', 'POST']
+)
+
+web_bp.add_url_rule(
+  '/painel/pedidos/<int:pedido_id>/excluir',
+  endpoint='excluir_pedido',
+  view_func=excluir_pedido_web,
+  methods=['POST']
 )
 
 web_bp.add_url_rule(

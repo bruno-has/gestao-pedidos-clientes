@@ -18,7 +18,8 @@ from app.services.pedido_service import (
   buscar_pedido_por_id,
   atualizar_pedido,
   atualizar_status_pedido,
-  listar_pedidos_por_cliente
+  listar_pedidos_por_cliente,
+  excluir_pedido
 )
 
 def login_page():
@@ -458,6 +459,16 @@ def editar_pedido(pedido_id):
     pedido=pedido,
     clientes=clientes
   )
+
+@login_required
+def excluir_pedido_web(pedido_id):
+  resultado = excluir_pedido(pedido_id)
+  if resultado is None:
+    flash('Pedido não encontrado.', 'warning')
+  else:
+    flash('Pedido excluído com sucesso!', 'success')
+
+  return redirect(url_for('web.pedidos'))
 
 @login_required
 def sair():
