@@ -21,6 +21,7 @@ from app.services.pedido_service import (
   listar_pedidos_por_cliente,
   excluir_pedido
 )
+from app.models.pedido import Pedido
 
 def login_page():
   if current_user.is_authenticated:
@@ -50,7 +51,23 @@ def login_page():
 
 @login_required
 def painel():
-  return render_template('dashboard.html')
+  pedidos_pendentes = Pedido.query.filter_by(status='pendente').count()
+  pedidos_em_producao = Pedido.query.filter_by(status='em produção').count()
+  pedidos_concluidos = Pedido.query.filter_by(status='concluído').count()
+
+  proximas_retiradas = (
+    Pedido.query.filter(
+      Pedido.data_retirada >= datetime.now(),
+      Pedido.status != 'concluído'
+    ).order_by(Pedido.data_retirada.asc()).limit(5).all())
+
+  return render_template(
+    'dashboard.html',
+    pedidos_pendentes=pedidos_pendentes,
+    pedidos_em_producao=pedidos_em_producao,
+    pedidos_concluidos=pedidos_concluidos,
+    proximas_retiradas=proximas_retiradas
+    )
 
 @login_required
 def pagina_clientes():

@@ -1,3 +1,4 @@
+
 {% extends "base.html" %}
 
 {% block title %}Painel{% endblock %}
@@ -7,30 +8,122 @@
 <section class="dashboard-container">
 
   <div class="dashboard-header">
-
     <h1>Olá, {{ current_user.nome }}!</h1>
-    <p>Selecione uma opção:</p>
-  
+    <p>Acompanhe os pedidos e organize sua produção.</p>
   </div>
 
-  <div class="dashboard-menu">
+  <section class="dashboard-indicadores" aria-label="Resumo dos pedidos">
 
-    <a href="{{ url_for('web.clientes') }}" class="menu-card">
-      <span class="menu-icon" aria-hidden="true">👥</span>
-      <span>Clientes</span>
-    </a>
+    <article class="indicador-card indicador-pendente">
+      <span class="indicador-icone" aria-hidden="true">⏳</span>
+      <div>
+        <p>Pedidos pendentes</p>
+        <strong>{{ pedidos_pendentes }}</strong>
+      </div>
+    </article>
 
-    <a href="{{ url_for('web.novo_pedido') }}" class="menu-card menu-principal">
-      <span class="menu-icon" aria-hidden="true">🛒</span>
-      <span>Novo Pedido</span>
-    </a>
+    <article class="indicador-card indicador-producao">
+      <span class="indicador-icone" aria-hidden="true">👩‍🍳</span>
+      <div>
+        <p>Em produção</p>
+        <strong>{{ pedidos_em_producao }}</strong>
+      </div>
+    </article>
 
-    <a href="{{ url_for('web.pedidos') }}" class="menu-card">
-      <span class="menu-icon" aria-hidden="true">📋</span>
-      <span>Pedidos</span>
-    </a>
+    <article class="indicador-card indicador-concluido">
+      <span class="indicador-icone" aria-hidden="true">✅</span>
+      <div>
+        <p>Concluídos</p>
+        <strong>{{ pedidos_concluidos }}</strong>
+      </div>
+    </article>
 
-  </div>
+  </section>
+
+  <section class="dashboard-retiradas">
+
+    <div class="dashboard-secao-cabecalho">
+      <div>
+        <h2>Próximas retiradas</h2>
+        <p>Pedidos que precisam ser preparados e entregues ao cliente.</p>
+      </div>
+
+      <a href="{{ url_for('web.pedidos') }}" class="link-ver-todos">Ver todos</a>
+    </div>
+
+    {% if proximas_retiradas %}
+
+      <div class="dashboard-lista-retiradas">
+
+        {% for pedido in proximas_retiradas %}
+
+          <article class="retirada-card">
+
+            <div class="retirada-informacoes">
+              <strong>Pedido #{{ pedido.id }}</strong>
+              <span>{{ pedido.cliente.nome }}</span>
+            </div>
+
+            <div class="retirada-data">
+              <span>Data de retirada</span>
+              <strong>
+                {{ pedido.data_retirada.strftime('%d/%m/%Y') }}
+              </strong>
+              <span>
+                {{ pedido.data_retirada.strftime('%H:%M') }}
+              </span>
+            </div>
+
+            <div class="retirada-status">
+              <span class="status-{{ pedido.status|replace(' ', '-') }}">
+                {{ pedido.status|capitalize }}
+              </span>
+            </div>
+
+            <a href="{{ url_for('web.detalhes_pedido', pedido_id=pedido.id) }}" class="btn-ver-pedido">Ver pedido</a>
+
+          </article>
+
+        {% endfor %}
+
+      </div>
+
+    {% else %}
+
+      <div class="dashboard-vazio">
+        <span aria-hidden="true">📅</span>
+        <p>Não existem próximas retiradas agendadas.</p>
+      </div>
+
+    {% endif %}
+
+  </section>
+
+  <section class="dashboard-acessos">
+
+    <h2>Acesso rápido</h2>
+
+    <div class="dashboard-menu">
+
+      <a href="{{ url_for('web.clientes') }}" class="menu-card">
+        <span class="menu-icon" aria-hidden="true">👥</span>
+        <span>Clientes</span>
+      </a>
+
+      <a href="{{ url_for('web.novo_pedido') }}"
+         class="menu-card menu-principal">
+        <span class="menu-icon" aria-hidden="true">🛒</span>
+        <span>Novo Pedido</span>
+      </a>
+
+      <a href="{{ url_for('web.pedidos') }}" class="menu-card">
+        <span class="menu-icon" aria-hidden="true">📋</span>
+        <span>Pedidos</span>
+      </a>
+
+    </div>
+
+  </section>
 
 </section>
 
