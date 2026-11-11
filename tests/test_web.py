@@ -151,3 +151,13 @@ def test_bloquear_login_sem_token_csrf(app, client):
   )
 
   assert resposta.status_code == 400
+
+def test_exibir_botao_alto_contraste_painel(cliente_autenticado):
+  resposta = cliente_autenticado.get('/painel')
+
+  conteudo = resposta.get_data(as_text=True)
+
+  assert resposta.status_code == 200
+  assert 'btn-alto-contraste' in conteudo
+  assert 'aria-pressed="false"' in conteudo
+

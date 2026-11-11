@@ -17,4 +17,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
     });
   }
+
+  // Controle do modo de alto contraste.
+  const botaoContraste = document.getElementById('btn-alto-contraste');
+  if (botaoContraste) {
+
+    const aplicarAltoContraste = (ativado) => {
+      document.body.classList.toggle('modo-alto-contraste', ativado);
+      botaoContraste.setAttribute('aria-pressed', String(ativado));
+      botaoContraste.textContent = ativado ? 'Desativar alto contraste' : 'Alto contraste';
+    };
+
+    // Recupera a preferência salva pelo usuário.
+    let contrasteAtivado = false;
+
+    try {
+      contrasteAtivado =
+        localStorage.getItem('altoContraste') === 'ativado';
+    } catch (erro) {
+      console.warn('Não foi possível recuperar a preferência de contraste.');
+    }
+
+    aplicarAltoContraste(contrasteAtivado);
+
+    // Alterna o modo de contraste.
+    botaoContraste.addEventListener('click', () => {
+
+      contrasteAtivado = !contrasteAtivado;
+      aplicarAltoContraste(contrasteAtivado);
+
+      try {
+        localStorage.setItem(
+          'altoContraste',
+          contrasteAtivado ? 'ativado' : 'desativado'
+        );
+      } catch (erro) {
+        console.warn('Não foi possível salvar a preferência de contraste.');
+      }
+    });
+  }
 });
