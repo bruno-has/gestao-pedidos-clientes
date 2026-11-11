@@ -1,18 +1,20 @@
-{% extends 'base.html' %} 
-
-{% block title %}Pedidos{% endblock %} 
-
-{% block content %}
+{% extends 'base.html' %} {% block title %}Pedidos{% endblock %} {% block
+content %}
 
 <div class="pedidos-container">
-
   <div class="pedidos-cabecalho">
     <div>
+      <a href="{{ url_for('web.painel') }}" class="menu-voltar">
+        ← Voltar ao Menu
+      </a>
+
       <h1>Pedidos</h1>
       <p>Consulte os pedidos e acompanhe as retiradas.</p>
     </div>
 
-    <a href="{{ url_for('web.novo_pedido') }}" class="btn-novo-pedido">+ Novo pedido</a>
+    <a href="{{ url_for('web.novo_pedido') }}" class="btn-novo-pedido">
+      + Novo pedido
+    </a>
   </div>
 
   {% if pedidos %}
@@ -42,7 +44,6 @@
         {% for registro in pedidos %} {% set pedido = registro.pedido %}
 
         <tr>
-
           <td data-label="Nº">#{{ pedido.id }}</td>
 
           <td data-label="Cliente">
@@ -85,9 +86,12 @@
           </td>
 
           <td data-label="Ações">
-            <a href="{{ url_for('web.detalhes_pedido', pedido_id=pedido.id) }}" class="btn-ver-pedido">Ver Detalhes</a>
+            <a
+              href="{{ url_for('web.detalhes_pedido', pedido_id=pedido.id) }}"
+              class="btn-ver-pedido"
+              >Ver Detalhes</a
+            >
           </td>
-
         </tr>
 
         {% endfor %}
@@ -102,7 +106,9 @@
 
     <p>Quando você cadastrar um pedido, ele aparecerá nesta página.</p>
 
-    <a href="{{ url_for('web.novo_pedido') }}" class="btn-novo-pedido">Cadastrar primeiro pedido</a>
+    <a href="{{ url_for('web.novo_pedido') }}" class="btn-novo-pedido"
+      >Cadastrar primeiro pedido</a
+    >
   </div>
 
   {% endif %}

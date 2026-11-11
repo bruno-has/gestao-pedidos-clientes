@@ -1,0 +1,195 @@
+
+/* -=-=-=-=-=- MODO DE ALTO CONTRASTE -=-=-=-=-=- */
+
+.btn-acessibilidade {
+  min-height: 44px;
+  padding: 10px 14px;
+
+  border: 2px solid #ffffff;
+  border-radius: 8px;
+
+  background: #064b78;
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.btn-acessibilidade:hover {
+  background: #ffffff;
+  color: #064b78;
+}
+
+.btn-acessibilidade:focus-visible {
+  outline: 3px solid #ffeb3b;
+  outline-offset: 3px;
+}
+
+/* -=-=-=- Cores gerais -=-=-=- */
+
+body.modo-alto-contraste {
+  background: #000000;
+  color: #ffffff;
+}
+
+/* -=-=-=- Cabeçalho -=-=-=- */
+
+body.modo-alto-contraste .main-header {
+  background: #000000;
+  color: #ffffff;
+  border-bottom: 2px solid #ffff00;
+  box-shadow: none;
+}
+
+body.modo-alto-contraste .main-header a,
+body.modo-alto-contraste .msg-user {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+body.modo-alto-contraste .logo {
+  border: 0;
+}
+
+body.modo-alto-contraste .logo:hover {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+/* -=-=-=- Conteúdo e textos -=-=-=- */
+
+body.modo-alto-contraste h1,
+body.modo-alto-contraste h2,
+body.modo-alto-contraste h3,
+body.modo-alto-contraste p,
+body.modo-alto-contraste label,
+body.modo-alto-contraste span,
+body.modo-alto-contraste strong {
+  color: #ffffff;
+}
+
+/* -=-=-=- Cartões e áreas de conteúdo -=-=-=- */
+
+body.modo-alto-contraste .indicador-card,
+body.modo-alto-contraste .menu-card,
+body.modo-alto-contraste .login-card,
+body.modo-alto-contraste .card,
+body.modo-alto-contraste .retirada-card,
+body.modo-alto-contraste .dashboard-container,
+body.modo-alto-contraste .form-container,
+body.modo-alto-contraste .detalhes-container,
+body.modo-alto-contraste .relatorio-container,
+body.modo-alto-contraste .detalhes-pedido-card,
+body.modo-alto-contraste .cliente-detalhes-card,
+body.modo-alto-contraste .status-pedido,
+body.modo-alto-contraste .pedido-form-card,
+body.modo-alto-contraste .status-pedido {
+  background: #000000;
+  color: #ffffff;
+  border: 2px solid #ffff00;
+  box-shadow: none;
+}
+
+body.modo-alto-contraste .menu-card:hover span {
+  color: #000000;
+}
+
+/* -=-=-=- Botões -=-=-=- */
+
+body.modo-alto-contraste button,
+body.modo-alto-contraste .button,
+body.modo-alto-contraste .btn-relatorio {
+  background: #ffff00;
+  color: #000000;
+  border: 2px solid #ffff00;
+}
+
+body.modo-alto-contraste button:hover,
+body.modo-alto-contraste .button:hover,
+body.modo-alto-contraste .btn-relatorio:hover {
+  background: #ffffff;
+  color: #000000;
+}
+
+body.modo-alto-contraste .cliente-total-pedidos,
+body.modo-alto-contraste .btn-sair {
+  background-color: #000000;
+  color: #ffffff;
+  border: 2px solid #fff000;
+}
+
+body.modo-alto-contraste .btn-sair:hover {
+  opacity: 1;
+  background-color: #fff000;
+  border: 2px solid #ffffff;
+}
+
+/* -=-=-=- Campos de formulário -=-=-=- */
+
+body.modo-alto-contraste .form-card,
+body.modo-alto-contraste .pedido-secao,
+body.modo-alto-contraste .pedido-item,
+body.modo-alto-contraste input,
+body.modo-alto-contraste select,
+body.modo-alto-contraste textarea {
+  background: #000000;
+  color: #ffffff;
+  border: 2px solid #ffff00;
+}
+
+body.modo-alto-contraste input::placeholder,
+body.modo-alto-contraste textarea::placeholder {
+  color: #dddddd;
+  opacity: 1;
+}
+
+/* -=-=-=- Relatórios -=-=-=- */
+
+body.modo-alto-contraste .relatorio-filtros,
+body.modo-alto-contraste .relatorio-lista {
+  background-color: #000000;
+}
+
+/* -=-=-=- Links -=-=-=- */
+
+body.modo-alto-contraste a {
+  background-color: #000000;
+  color: #ffffff;
+  border: 2px solid #fff000;
+}
+
+body.modo-alto-contraste a:hover {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* -=-=-=- Tabelas -=-=-=- */
+
+body.modo-alto-contraste table,
+body.modo-alto-contraste th,
+body.modo-alto-contraste td {
+  background: #000000;
+  color: #ffffff;
+  border-color: #ffff00;
+}
+
+/* -=-=-=- Mensagens do sistema -=-=-=- */
+
+body.modo-alto-contraste .flash-message {
+  background: #000000;
+  color: #ffffff;
+  border: 2px solid #ffff00;
+}
+
+/* -=-=-=- Foco visível para navegação por teclado -=-=-=- */
+
+body.modo-alto-contraste a:focus-visible,
+body.modo-alto-contraste button:focus-visible,
+body.modo-alto-contraste input:focus-visible,
+body.modo-alto-contraste select:focus-visible,
+body.modo-alto-contraste textarea:focus-visible {
+  outline: 3px solid #ffff00;
+  outline-offset: 3px;
+}

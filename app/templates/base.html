@@ -20,6 +20,8 @@
       <div class="header-user">
         <a href="{{ url_for('web.relatorio') }}" class="btn-relatorio">Relatórios</a>
 
+        <button type="button" id="btn-alto-contraste" class="btn-acessibilidade" aria-pressed="false" title="Ativar ou desativar o alto contraste">Alto contraste</button>
+
         <span class="msg-user">
           <span aria-hidden="true">👤</span>
           Olá, {{ current_user.nome }}!
