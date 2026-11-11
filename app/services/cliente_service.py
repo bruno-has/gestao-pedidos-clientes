@@ -4,7 +4,7 @@ from app.models.cliente import Cliente
 def cadastrar_cliente(nome, telefone):
   cliente = Cliente(nome=nome, telefone=telefone)
   db.session.add(cliente)
-  db.session.commit()
+  _commit()
 
   return cliente
 
@@ -22,7 +22,7 @@ def atualizar_cliente(cliente_id, nome, telefone):
 
   cliente.nome = nome
   cliente.telefone = telefone
-  db.session.commit()
+  _commit()
 
   return cliente
 
@@ -38,7 +38,7 @@ def atualizar_cliente_parcial(cliente_id, dados):
   if 'telefone' in dados:
     cliente.telefone = dados['telefone']
 
-  db.session.commit()
+  _commit()
 
   return cliente
 
@@ -52,6 +52,13 @@ def excluir_cliente(cliente_id):
     return False
 
   db.session.delete(cliente)
-  db.session.commit()
+  _commit()
 
   return True
+
+def _commit():
+  try: 
+    db.session.commit()
+  except Exception:
+    db.session.rollback()
+    raise

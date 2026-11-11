@@ -19,6 +19,85 @@ def test_cadastrar_cliente(client):
   assert dados['cliente']['nome'] == 'João da Silva'
   assert dados['cliente']['telefone'] == '11999999999'
 
+def test_cadastrar_cliente_dados_invalidos(client):
+  resposta = client.post('/clientes/', json=['lista', 'inválida'])
+
+  assert resposta.status_code == 400
+
+  dados = resposta.get_json()
+
+  assert dados['erro'] == 'O corpo da requisição deve ser um objeto JSON'
+
+def test_cadastrar_cliente_sem_nome(client):
+  resposta = client.post('/clientes/', json={
+    'telefone': '11999999999'
+  })
+
+  assert resposta.status_code == 400
+
+  dados = resposta.get_json()
+
+  assert dados['erro'] == 'O nome do cliente é obrigatório'
+
+def test_cadastrar_cliente_nome_vazio(client):
+  resposta = client.post('/clientes/', json={
+    'nome': '',
+    'telefone': '11999999999'
+  })
+
+  assert resposta.status_code == 400
+
+  dados = resposta.get_json()
+
+  assert dados['erro'] == 'O nome do cliente é obrigatório'
+
+def test_cadastrar_cliente_nome_apenas_espacos(client):
+  resposta = client.post('/clientes/', json={
+    'nome': '    ',
+    'telefone': '11999999999'
+  })
+
+  assert resposta.status_code == 400
+
+  dados = resposta.get_json()
+
+  assert dados['erro'] == 'O nome do cliente é obrigatório'
+
+def test_cadastrar_cliente_sem_telefone(client):
+  resposta = client.post('/clientes/', json={
+    'nome': 'João da Silva'
+  })
+
+  assert resposta.status_code == 400
+
+  dados = resposta.get_json()
+
+  assert dados['erro'] == 'O telefone do cliente é obrigatório'
+
+def test_cadastrar_cliente_telefone_vazio(client):
+  resposta = client.post('/clientes/', json={
+    'nome': 'João da Silva',
+    'telefone': ''
+  })
+
+  assert resposta.status_code == 400
+
+  dados = resposta.get_json()
+
+  assert dados['erro'] == 'O telefone do cliente é obrigatório'
+
+def test_cadastrar_cliente_telefone_somente_espacos(client):
+  resposta = client.post('/clientes/', json={
+    'nome': 'João da Silva',
+    'telefone': '      '
+  })
+
+  assert resposta.status_code == 400
+
+  dados = resposta.get_json()
+
+  assert dados['erro'] == 'O telefone do cliente é obrigatório'
+
 def test_listar_clientes(client):
   cadastrar_cliente(client)
 

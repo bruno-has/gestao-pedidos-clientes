@@ -115,7 +115,6 @@ def test_editar_pedido_com_sucesso(app, cliente_autenticado):
     data=dados_edicao(cliente_novo_id)
   )
 
-  print(resposta.get_data(as_text=True))
   assert resposta.status_code == 302
 
   with app.app_context():
@@ -149,7 +148,9 @@ def test_rejeitar_edicao_com_quantidade_invalida(app, cliente_autenticado):
     cliente_id = pedido.cliente_id
 
   dados = dados_edicao(cliente_id)
-  dados['quantidade[]'] = ['0', '10']
+  dados['nome_produto[]'] = ['Bolo de chocolate']
+  dados['quantidade[]'] = ['0']
+  dados['valor_unitario[]'] = ['45.00']
 
   resposta = cliente_autenticado.post(
     f'/painel/pedidos/{pedido_id}/editar',
@@ -165,7 +166,7 @@ def test_rejeitar_edicao_com_quantidade_invalida(app, cliente_autenticado):
     assert pedido.observacoes == 'Observação original'
     assert len(pedido.itens) == 1
     assert pedido.itens[0].nome_produto == 'Bolo de chocolate'
-
+    assert pedido.itens[0].quantidade == 2
 
 def test_editar_pedido_inexistente(cliente_autenticado):
   resposta = cliente_autenticado.get(

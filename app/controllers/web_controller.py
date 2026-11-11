@@ -23,6 +23,11 @@ from app.services.pedido_service import (
   excluir_pedido
 )
 from app.models.pedido import Pedido
+from app.utils.pedido_helpers import (
+  calcular_total_pedido,
+  adicionar_total_pedidos,
+  validar_itens_formulario
+)
 
 def login_page():
   if current_user.is_authenticated:
@@ -135,20 +140,8 @@ def detalhes_cliente(cliente_id):
     return redirect(url_for('web.clientes'))
 
   pedidos = listar_pedidos_por_cliente(cliente_id)
-  pedidos_com_total = []
 
-  for pedido in pedidos:
-    total = sum(
-      (
-        item.quantidade * item.valor_unitario
-        for item in pedido.itens
-      ), Decimal('0.00')
-    )
-
-    pedidos_com_total.append({
-      'pedido': pedido,
-      'total': total
-    })
+  pedidos_com_total = adicionar_total_pedidos(pedidos)
 
   return render_template(
     'cliente_detalhes.html',
@@ -177,19 +170,7 @@ def pagina_pedidos():
 
   pedidos = listar_pedidos()
 
-  pedidos_com_total = []
-
-  for pedido in pedidos:
-    total = sum(
-      (
-        item.quantidade * item.valor_unitario
-        for item in pedido.itens
-      ), Decimal('0.00'))
-    
-    pedidos_com_total.append({
-      'pedido': pedido,
-      'total': total
-    })
+  pedidos_com_total = adicionar_total_pedidos(pedidos)
 
   return render_template('pedidos.html', pedidos=pedidos_com_total)
 
@@ -235,64 +216,15 @@ def pagina_novo_pedido():
     quantidades = request.form.getlist('quantidade[]')
     valores = request.form.getlist('valor_unitario[]')
 
-    if not (len(nomes) == len(quantidades) == len(valores)):
-      flash('Os dados dos itens do pedido estão inconsistentes', 'warning')
-      return exibir_formulario_pedido(request.form)
-
-    itens = []
-
-    for nome, quantidade_texto, valor_texto in zip(
+    itens, erro = validar_itens_formulario(
       nomes, 
       quantidades, 
-      valores
-    ):
-      nome = nome.strip()
-      quantidade_texto = quantidade_texto.strip()
-      valor_texto = valor_texto.strip()
+      valores, 
+      ignorar_linhas_vazias=True
+    )
 
-      if not nome and not quantidade_texto and not valor_texto:
-        continue
-
-      if not nome or not quantidade_texto or not valor_texto:
-        flash('Preencha todos os campos de cada item', 'warning')
-        return exibir_formulario_pedido(request.form)
-
-      if len(nome) > 100: 
-        flash('O nome do produto deve ter até 100 caracteres', 'warning')
-        return exibir_formulario_pedido(request.form)
-
-      try:
-        quantidade = int(quantidade_texto)
-        if quantidade <= 0:
-          raise ValueError
-
-      except (ValueError, TypeError):
-        flash('A quantidade de cada item deve ser um inteiro positivo', 'warning')
-        return exibir_formulario_pedido(request.form)
-
-      try:
-        valor_unitario = Decimal(valor_texto)
-        
-        if (
-          not valor_unitario.is_finite()
-          or valor_unitario <= 0
-          or valor_unitario >= Decimal('100000000') 
-          or valor_unitario.as_tuple().exponent < -2
-        ):
-          raise InvalidOperation
-
-      except (InvalidOperation, ValueError):
-        flash('Informe um valor unitário positivo com no máximo duas casas decimais', 'warning')
-        return exibir_formulario_pedido(request.form)
-
-      itens.append({
-        'nome_produto': nome, 
-        'quantidade': quantidade,
-        'valor_unitario': valor_unitario
-      })
-
-    if not itens:
-      flash('Adicione pelo menos um item ao pedido', 'warning')
+    if erro:
+      flash(erro, 'warning')
       return exibir_formulario_pedido(request.form)
 
     pedido = cadastrar_pedido(
@@ -320,12 +252,7 @@ def detalhes_pedido(pedido_id):
     flash('Pedido não encontrado', 'warning')
     return redirect(url_for('web.pedidos'))
 
-  total = sum(
-    (
-      item.quantidade * item.valor_unitario
-      for item in pedido.itens
-    ), Decimal('0.00')
-  )
+  total = calcular_total_pedido(pedido)
 
   return render_template(
     'pedido_detalhes.html', 
@@ -399,53 +326,25 @@ def editar_pedido(pedido_id):
         pedido=pedido,
         clientes=clientes
       )
-
+    
     nomes = request.form.getlist('nome_produto[]')
     quantidades = request.form.getlist('quantidade[]')
     valores = request.form.getlist('valor_unitario[]')
+    itens, erro = validar_itens_formulario(
+      nomes,
+      quantidades,
+      valores,
+      ignorar_linhas_vazias=False
+    )
 
-    if not nomes or not (len(nomes) == len(quantidades) == len(valores)):
-      flash('Informe pelo menos um item válido', 'warning')
+    if erro:
+      flash(erro, 'warning')
       return render_template(
         'pedido_editar.html',
         pedido=pedido,
-        clientes=clientes
-      )
-
-    itens = []
-
-    try:
-      for nome, quantidade, valor in zip(nomes, quantidades, valores):
-        nome = nome.strip()
-        if not nome or len(nome) > 100:
-          raise ValueError
-
-        quantidade = int(quantidade)
-        if quantidade <= 0:
-          raise ValueError
-
-        valor = Decimal(valor)
-        if (
-          not valor.is_finite()
-          or valor <= 0
-          or valor >= Decimal('100000000')
-          or valor.as_tuple().exponent < -2
-        ):
-          raise ValueError
-
-        itens.append({
-          'nome_produto': nome,
-          'quantidade': quantidade,
-          'valor_unitario': valor
-        })
-
-    except (ValueError, TypeError, InvalidOperation):
-      flash('Confira os produtos, quantidades e valores informados', 'warning')
-      return render_template(
-        'pedido_editar.html',
-        pedido=pedido,
-        clientes=clientes
-      )
+        clientes=clientes,
+        erro=erro
+      ), 200
 
     observacoes = request.form.get('observacoes', '').strip()
 
@@ -531,12 +430,7 @@ def relatorio():
     )
 
     for pedido in pedidos:
-      total_pedido = sum(
-        (
-          item.quantidade * item.valor_unitario
-          for item in pedido.itens
-        ), Decimal('0.00')
-      )
+      total_pedido = calcular_total_pedido(pedido)
 
       pedidos_com_total.append({
         'pedido': pedido,

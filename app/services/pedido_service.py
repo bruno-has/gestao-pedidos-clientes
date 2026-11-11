@@ -13,17 +13,17 @@ def cadastrar_pedido(cliente_id, data_retirada, observacoes, itens):
     return None
 
   # cria o pedido
-  pedido = Pedido(cliente_id=cliente.id, data_retirada=data_retirada, observacoes=observacoes)
+  pedido = Pedido(
+    cliente_id=cliente.id, 
+    data_retirada=data_retirada, 
+    observacoes=observacoes
+  )
 
   # adiciona os itens ao pedido
-  for item in itens:
-    novo_item = ItemPedido(nome_produto=item['nome_produto'], quantidade=item['quantidade'], valor_unitario=item['valor_unitario'])
-
-    pedido.itens.append(novo_item)
-
+  pedido.itens.extend(_criar_itens_pedido(itens))
   
   db.session.add(pedido)
-  db.session.commit()
+  _commit()
 
   return pedido
 
@@ -67,16 +67,9 @@ def atualizar_pedido(pedido_id, cliente_id, data_retirada, observacoes, itens):
   pedido.data_retirada = data_retirada
   pedido.observacoes = observacoes
   pedido.itens.clear()
+  pedido.itens.extend(_criar_itens_pedido(itens))
 
-  for item in itens:
-    novo_item = ItemPedido(
-      nome_produto=item['nome_produto'], 
-      quantidade=item['quantidade'], 
-      valor_unitario=item['valor_unitario']
-    )
-    pedido.itens.append(novo_item)
-
-  db.session.commit()
+  _commit()
 
   return pedido
 
@@ -88,7 +81,7 @@ def atualizar_status_pedido(pedido_id, status):
 
   pedido.status = status
 
-  db.session.commit()
+  _commit()
 
   return pedido
 
@@ -99,6 +92,22 @@ def excluir_pedido(pedido_id):
     return None
 
   db.session.delete(pedido)
-  db.session.commit()
+  _commit()
 
   return True
+
+def _criar_itens_pedido(itens):
+  return [
+    ItemPedido(
+      nome_produto=item['nome_produto'],
+      quantidade=item['quantidade'],
+      valor_unitario=item['valor_unitario']
+    ) for item in itens
+  ]
+
+def _commit():
+  try: 
+    db.session.commit()
+  except Exception:
+    db.session.rollback()
+    raise

@@ -7,16 +7,28 @@ from app.services.cliente_service import (
   excluir_cliente,
 )
 
+def serializar_cliente(cliente):
+  return {
+    'id': cliente.id,
+    'nome': cliente.nome,
+    'telefone': cliente.telefone
+  }
+
 def criar_cliente(dados):
+  if not isinstance(dados, dict):
+    return {
+      'erro': 'O corpo da requisição deve ser um objeto JSON'
+    }, 400
+
   nome = dados.get('nome')
   telefone = dados.get('telefone')
 
-  if not nome or not nome.strip():
+  if not isinstance(nome, str) or not nome.strip():
     return {
       'erro': 'O nome do cliente é obrigatório'
     }, 400
 
-  if not telefone or not telefone.strip():
+  if not isinstance(telefone, str) or not telefone.strip():
     return {
       'erro': 'O telefone do cliente é obrigatório'
     }, 400
@@ -25,11 +37,7 @@ def criar_cliente(dados):
 
   return {
     'mensagem': 'Cliente cadastrado com sucesso',
-    'cliente': {
-      'id':cliente.id,
-      'nome': cliente.nome,
-      'telefone': cliente.telefone
-    }
+    'cliente': serializar_cliente(cliente)
   }, 201
 
 def obter_clientes():
@@ -37,11 +45,7 @@ def obter_clientes():
 
   return {
     'clientes': [
-      {
-        'id': cliente.id,
-        'nome': cliente.nome,
-        'telefone': cliente.telefone
-      } 
+      serializar_cliente(cliente)
       for cliente in clientes
     ]
   }, 200
@@ -55,11 +59,7 @@ def obter_cliente_por_id(cliente_id):
     }, 404
 
   return {
-    'cliente': {
-      'id': cliente.id,
-      'nome': cliente.nome,
-      'telefone': cliente.telefone
-    }
+    'cliente': serializar_cliente(cliente)
   }, 200
 
 def atualizar_cliente_completo(cliente_id, dados):
@@ -90,11 +90,7 @@ def atualizar_cliente_completo(cliente_id, dados):
 
   return {
     'mensagem': 'Cliente atualizado com sucesso',
-    'cliente': {
-      'id': cliente.id,
-      'nome': cliente.nome,
-      'telefone': cliente.telefone
-    }
+    'cliente': serializar_cliente(cliente)
   }, 200
 
 def atualizar_cliente_parcialmente(cliente_id, dados):
@@ -143,11 +139,7 @@ def atualizar_cliente_parcialmente(cliente_id, dados):
 
   return {
     'mensagem': 'Cliente atualizado com sucesso',
-    'cliente': {
-      'id': cliente.id,
-      'nome': cliente.nome,
-      'telefone': cliente.telefone
-    }
+    'cliente': serializar_cliente(cliente)
   }, 200
 
 def excluir_cliente_por_id(cliente_id):

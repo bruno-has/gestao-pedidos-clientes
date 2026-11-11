@@ -15,6 +15,12 @@
     <a href="{{ url_for('web.detalhes_pedido', pedido_id=pedido.id) }}" class="btn-voltar">Voltar aos detalhes</a>
   </div>
 
+  {% if erro %}
+  <div class="mensagem-erro">
+    {{ erro }}
+  </div>
+  {% endif %}
+
   <form method="POST" action="{{ url_for('web.editar_pedido', pedido_id=pedido.id) }}" class="form-pedido">
 
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
