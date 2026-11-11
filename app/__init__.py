@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, redirect, url_for, request
+from sqlalchemy import text
 
 from config import Config
 from app.extensions import db, login_manager, csrf
@@ -51,5 +52,22 @@ def create_app(test_config=None):
   @app.route('/')
   def inicio():
     return redirect(url_for('web.login'))
+
+  @app.route('/health', methods=['GET'])
+  def health():
+    try:
+      db.session.execute(text('SELECT 1'))
+
+      return jsonify({
+        'status': 'ok',
+        'database': 'connected'
+      }), 200
+
+    except Exception:
+      db.session.rollback()
+
+      return jsonify({
+        'status': 'unavailable'
+      }), 503
 
   return app

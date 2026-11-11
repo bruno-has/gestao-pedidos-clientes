@@ -42,7 +42,10 @@ def validar_itens_formulario(
     valor_texto = valor_texto.strip()
 
     if not nome and not quantidade_texto and not valor_texto:
-      continue
+      if ignorar_linhas_vazias:
+        continue
+
+      return None, 'Preencha todos os campos de cada item'  
 
     if not nome or not quantidade_texto or not valor_texto:
       return None, 'Preencha todos os campos de cada item'

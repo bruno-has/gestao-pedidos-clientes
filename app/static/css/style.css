@@ -2,7 +2,6 @@
 @import url("./login-e-botoes.css");
 @import url("./dashboard-inicial.css");
 @import url("./pagina-em-desenvolvimento.css");
-@import url("./responsividade-e-paginas-internas.css");
 @import url("./clientes-listagem-e-formulario.css");
 @import url("./pedido-formulario.css");
 @import url("./pedidos-listagem.css");
@@ -11,3 +10,4 @@
 @import url("./pedido-edicao.css");
 @import url("./dashboard-componentes.css");
 @import url("./relatorios.css");
+@import url("./responsividade-e-paginas-internas.css");
