@@ -136,9 +136,9 @@
 }
 
 .btn-remover-item {
+  align-self: flex-end;
   padding: 10px 12px;
-  margin-bottom: 0;
-  border: 1px solid #dc3545;
+  border: 2px solid #dc3545;
   border-radius: 6px;
   background: #fff;
   color: #dc3545;

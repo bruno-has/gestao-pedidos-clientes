@@ -1,5 +1,7 @@
 from decimal import Decimal
 
+from app.extensions import db
+from app.models.produto import Produto
 from app.utils.validacoes import (
   converter_id_positivo,
   converter_data_retirada,
@@ -71,3 +73,53 @@ def validar_itens_formulario(
     return None, 'Adicione pelo menos um item ao pedido'
 
   return itens, None
+
+def validar_produtos_formulario(produto_ids, quantidades, ignorar_linhas_vazias=False):
+  if len(produto_ids) != len(quantidades):
+    return None, 'Os dados dos itens estão inconsistentes'
+
+  itens = []
+
+  for produto_id_texto, quantidade_texto in zip(
+    produto_ids, quantidades
+  ):
+    produto_id_texto = produto_id_texto.strip()
+    quantidade_texto = quantidade_texto.strip()
+
+    if not produto_id_texto and not quantidade_texto:
+      if ignorar_linhas_vazias:
+        continue
+
+      return None, 'Preencha todos os campos de cada item'
+
+    if not produto_id_texto or not quantidade_texto:
+      return None, 'Selecione o produto e informe sua quantidade'
+
+    try:
+      produto_id = int(produto_id_texto)
+      if produto_id <= 0:
+        raise ValueError
+
+    except (ValueError, TypeError):
+      return None, 'Selecione um produto válido'
+
+    produto = db.session.get(Produto, produto_id)
+    if produto is None:
+      return None, 'Um dos produtos selecionados não existe'
+
+    quantidade = converter_quantidade(quantidade_texto)
+    if quantidade is None:
+      return None, 'A quantidade deve ser um inteiro positivo'
+
+    itens.append({
+      'produto_id': produto_id,
+      'nome_produto': produto.nome,
+      'quantidade': quantidade,
+      'valor_unitario': produto.valor_unitario
+    })
+
+  if not itens:
+    return None, 'Adicione pelo menos um produto ao pedido'
+
+  return itens, None
+    

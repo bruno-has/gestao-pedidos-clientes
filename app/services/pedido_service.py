@@ -99,6 +99,7 @@ def excluir_pedido(pedido_id):
 def _criar_itens_pedido(itens):
   return [
     ItemPedido(
+      produto_id=item.get('produto_id'),
       nome_produto=item['nome_produto'],
       quantidade=item['quantidade'],
       valor_unitario=item['valor_unitario']

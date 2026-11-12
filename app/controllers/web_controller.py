@@ -5,6 +5,7 @@ from flask import render_template, request, redirect, url_for, flash
 from flask_login import current_user, login_user, logout_user, login_required
 
 from app.services.auth_service import autenticar_usuario
+
 from app.services.cliente_service import (
   cadastrar_cliente,
   listar_clientes,
@@ -12,6 +13,8 @@ from app.services.cliente_service import (
   atualizar_cliente,
   excluir_cliente
 )
+
+from app.models.pedido import Pedido
 from app.services.pedido_service import (
   cadastrar_pedido,
   listar_pedidos,
@@ -22,11 +25,21 @@ from app.services.pedido_service import (
   listar_pedidos_por_periodo,
   excluir_pedido
 )
-from app.models.pedido import Pedido
+
+from app.services.produto_service import (
+  cadastrar_produto,
+  listar_produtos,
+  buscar_produto_por_id,
+  atualizar_produto,
+  excluir_produto
+)
+
+from app.utils.validacoes import converter_valor_unitario
 from app.utils.pedido_helpers import (
   calcular_total_pedido,
   adicionar_total_pedidos,
-  validar_itens_formulario
+  validar_itens_formulario,
+  validar_produtos_formulario
 )
 
 def login_page():
@@ -178,10 +191,12 @@ def pagina_pedidos():
 def exibir_formulario_pedido(form_data=None):
 
   clientes = listar_clientes()
+  produtos = listar_produtos()
 
   return render_template(
     'pedido_form.html',
     clientes=clientes,
+    produtos=produtos,
     form_data=form_data
   )
 
@@ -202,6 +217,11 @@ def pagina_novo_pedido():
       flash('Selecione um cliente válido', 'warning')
       return exibir_formulario_pedido(request.form)
 
+    cliente = buscar_cliente_por_id(cliente_id)
+    if cliente is None:
+      flash('O cliente selecionado não existe', 'warning')
+      return exibir_formulario_pedido(request.form)
+
     try:
       data_retirada = datetime.strptime(
         data_retirada_texto, 
@@ -212,16 +232,10 @@ def pagina_novo_pedido():
       flash('Informe uma data e horário de retirada válidos', 'warning')
       return exibir_formulario_pedido(request.form)
 
-    nomes = request.form.getlist('nome_produto[]')
+    produto_ids = request.form.getlist('produto_id[]')
     quantidades = request.form.getlist('quantidade[]')
-    valores = request.form.getlist('valor_unitario[]')
 
-    itens, erro = validar_itens_formulario(
-      nomes, 
-      quantidades, 
-      valores, 
-      ignorar_linhas_vazias=True
-    )
+    itens, erro = validar_produtos_formulario(produto_ids, quantidades, ignorar_linhas_vazias=True)
 
     if erro:
       flash(erro, 'warning')
@@ -290,6 +304,7 @@ def editar_pedido(pedido_id):
     return redirect(url_for('web.pedidos'))
 
   clientes = listar_clientes()
+  produtos = listar_produtos()
 
   if request.method == 'POST':
     try:
@@ -302,7 +317,8 @@ def editar_pedido(pedido_id):
       return render_template(
         'pedido_editar.html', 
         pedido=pedido, 
-        clientes=clientes
+        clientes=clientes,
+        produtos=produtos
       )
 
     cliente = buscar_cliente_por_id(cliente_id)
@@ -311,7 +327,8 @@ def editar_pedido(pedido_id):
       return render_template(
         'pedido_editar.html',
         pedido=pedido, 
-        clientes=clientes
+        clientes=clientes,
+        produtos=produtos
       )
 
     try:
@@ -324,16 +341,16 @@ def editar_pedido(pedido_id):
       return render_template(
         'pedido_editar.html',
         pedido=pedido,
-        clientes=clientes
+        clientes=clientes,
+        produtos=produtos
       )
     
-    nomes = request.form.getlist('nome_produto[]')
+    produto_ids = request.form.getlist('produto_id[]')
     quantidades = request.form.getlist('quantidade[]')
-    valores = request.form.getlist('valor_unitario[]')
-    itens, erro = validar_itens_formulario(
-      nomes,
+
+    itens, erro = validar_produtos_formulario(
+      produto_ids,
       quantidades,
-      valores,
       ignorar_linhas_vazias=False
     )
 
@@ -343,7 +360,7 @@ def editar_pedido(pedido_id):
         'pedido_editar.html',
         pedido=pedido,
         clientes=clientes,
-        erro=erro
+        produtos=produtos
       ), 200
 
     observacoes = request.form.get('observacoes', '').strip()
@@ -357,7 +374,7 @@ def editar_pedido(pedido_id):
     )
 
     if resultado is None:
-      flash('Pedido não encontrado')
+      flash('Pedido não encontrado', 'warning')
       return redirect(url_for('web.pedidos'))
 
     if resultado is False:
@@ -365,7 +382,8 @@ def editar_pedido(pedido_id):
       return render_template(
         'pedido_editar.html',
         pedido=pedido,
-        clientes=clientes
+        clientes=clientes,
+        produtos=produtos
       )
 
     flash('Pedido atualizado com sucesso', 'success')
@@ -374,7 +392,8 @@ def editar_pedido(pedido_id):
   return render_template(
     'pedido_editar.html',
     pedido=pedido,
-    clientes=clientes
+    clientes=clientes,
+    produtos=produtos
   )
 
 @login_required
@@ -387,6 +406,72 @@ def excluir_pedido_web(pedido_id):
 
   return redirect(url_for('web.pedidos'))
 
+@login_required
+def pagina_produtos():
+  produtos = listar_produtos()
+
+  return render_template('produtos.html', produtos=produtos)
+
+@login_required
+def novo_produto():
+  if request.method == 'POST':
+    nome = request.form.get('nome', '').strip()
+    valor_texto = request.form.get('valor_unitario', '').strip()
+
+    if len(nome) < 2 or len(nome) > 100:
+      flash('O nome do produto deve possuir entre 2 e 100 caracteres', 'warning')
+      return render_template('produto_form.html', produto=None, form_data=request.form)
+
+    valor_unitario = converter_valor_unitario(valor_texto)
+    if valor_unitario is None:
+      flash('Informe um valor unitário válido', 'warning')
+      return render_template('produto_form.html', produto=None, form_data=request.form)
+
+    cadastrar_produto(nome, valor_unitario)
+    flash('Produto cadastrado com sucesso', 'success')
+    return redirect(url_for('web.produtos'))
+
+  return render_template('produto_form.html', produto=None, form_data=None)
+
+@login_required
+def editar_produto(produto_id):
+  produto = buscar_produto_por_id(produto_id)
+  if produto is None:
+    flash('Produto não encontrado', 'warning')
+    return redirect(url_for('web.produtos'))
+
+  if request.method == 'POST':
+    nome = request.form.get('nome', '').strip()
+    valor_texto = request.form.get('valor_unitario', '').strip()
+
+    if len(nome) < 2 or len(nome) > 100:
+      flash('O nome do produto deve possuir entre 2 e 100 caracteres', 'warning')
+      return render_template('produto_form.html', produto=produto, form_data=request.form)
+
+    valor_unitario = converter_valor_unitario(valor_texto)
+    if valor_unitario is None:
+      flash('Informe um valor unitário válido', 'warning')
+      return render_template('produto_form.html', produto=produto, form_data=request.form)
+
+    atualizar_produto(produto_id, nome, valor_unitario) 
+    flash('Produto atualizado com sucesso')
+    return redirect(url_for('web.produtos'))
+
+  return render_template('produto_form.html', produto=produto, form_data=None)
+
+@login_required
+def excluir_produto_web(produto_id):
+  resultado = excluir_produto(produto_id)
+
+  if resultado is None:
+    flash('Produto não encontrado', 'warning')
+  elif resultado is False:
+    flash('Não foi possível excluir o produto', 'danger')
+  
+  else:
+    flash('Produto excluído com sucesso', 'success')
+
+  return redirect(url_for('web.produtos'))
 
 @login_required
 def relatorio():

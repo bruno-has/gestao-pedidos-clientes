@@ -3,20 +3,56 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnAdicionar = document.getElementById("btn-adicionar-item");
   const valorTotal = document.getElementById("valor-total");
 
-  // Atualiza o valor total do pedido
+  if (!listaItens || !btnAdicionar || !valorTotal) {
+    return;
+  }
+
+  // Obtém o valor unitário do produto selecionado.
+  function obterValorProduto(item) {
+    const select = item.querySelector('[name="produto_id[]"]');
+    if (!select || select.selectedIndex < 0) {
+      return 0;
+    }
+
+    const opcao = select.options[select.selectedIndex];
+
+    return Number(opcao.dataset.valor || 0);
+  }
+
+  // Atualiza a exibição do valor unitário.
+  function atualizarValorUnitario(item) {
+    const valorExibicao = item.querySelector(".valor_unitario_exibicao");
+    if (!valorExibicao) {
+      return;
+    }
+
+    const valor = obterValorProduto(item);
+
+    if (valor > 0) {
+      valorExibicao.textContent =
+        "Valor unitário: " +
+        valor.toLocaleString("pt-BR", {
+          style: "currency",
+          currency: "BRL",
+        });
+    } else {
+      valorExibicao.textContent = "Selecione um produto";
+    }
+  }
+
+  // Calcula o valor total de todos os itens.
   function calcularTotal() {
     let total = 0;
 
     const itens = listaItens.querySelectorAll(".pedido-item");
-
     itens.forEach((item) => {
-      const quantidade = Number(
-        item.querySelector('[name="quantidade[]"]').value,
-      );
+      const campoQuantidade = item.querySelector('[name="quantidade[]"]');
+      if (!campoQuantidade) {
+        return;
+      }
 
-      const valor = Number(
-        item.querySelector('[name="valor_unitario[]"]').value,
-      );
+      const quantidade = Number(campoQuantidade.value);
+      const valor = obterValorProduto(item);
 
       if (
         Number.isFinite(quantidade) &&
@@ -26,6 +62,8 @@ document.addEventListener("DOMContentLoaded", () => {
       ) {
         total += quantidade * valor;
       }
+
+      atualizarValorUnitario(item);
     });
 
     valorTotal.textContent = total.toLocaleString("pt-BR", {
@@ -34,69 +72,52 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Adiciona um novo item ao pedido
+  // Adiciona uma nova linha de produto.
   function adicionarItem() {
-    const novoItem = document.createElement("div");
+    const primeiroItem = listaItens.querySelector(".pedido-item");
+    if (!primeiroItem) {
+      return;
+    }
 
-    novoItem.classList.add("pedido-item");
+    const novoItem = primeiroItem.cloneNode(true);
 
-    novoItem.innerHTML = `
-      <div class="pedido-campo produto-campo">
-        <label>Produto</label>
-        <input
-          type="text"
-          name="nome_produto[]"
-          placeholder="Ex.: Bolo de chocolate"
-          maxlength="100"
-          required
-        >
-      </div>
+    const select = novoItem.querySelector('[name="produto_id[]"]');
+    const quantidade = novoItem.querySelector('[name="quantidade[]"]');
 
-      <div class="pedido-campo quantidade-campo">
-        <label>Quantidade</label>
-        <input
-          type="number"
-          name="quantidade[]"
-          min="1"
-          step="1"
-          value="1"
-          required
-        >
-      </div>
+    if (!select || !quantidade) {
+      return;
+    }
 
-      <div class="pedido-campo valor-campo">
-        <label>Valor unitário (R$)</label>
-        <input
-          type="number"
-          name="valor_unitario[]"
-          min="0.01"
-          step="0.01"
-          placeholder="0,00"
-          required
-        >
-      </div>
-
-      <button
-        type="button"
-        class="btn-remover-item"
-        aria-label="Remover item"
-        title="Remover item"
-      >Remover</button>
-    `;
+    select.selectedIndex = 0;
+    quantidade.value = 1;
 
     listaItens.appendChild(novoItem);
 
     calcularTotal();
   }
 
-  // Eventos dos botões e campos
+  // Evento do botão adicionar.
   btnAdicionar.addEventListener("click", adicionarItem);
 
+  // Detecta a seleção ou alteração do produto.
+  listaItens.addEventListener("change", (evento) => {
+    if (evento.target.matches('[name="produto_id[]"]')) {
+      calcularTotal();
+    }
+  });
+
+  // Detecta alterações na quantidade.
+  listaItens.addEventListener("input", (evento) => {
+    if (evento.target.matches('[name="quantidade[]"]')) {
+      calcularTotal();
+    }
+  });
+
+  // Remove um item do pedido.
   listaItens.addEventListener("click", (evento) => {
-    if (evento.target.classList.contains("btn-remover-item")) {
+    if (evento.target.closest(".btn-remover-item")) {
       const itens = listaItens.querySelectorAll(".pedido-item");
 
-      // Mantém pelo menos um item no formulário
       if (itens.length > 1) {
         evento.target.closest(".pedido-item").remove();
         calcularTotal();
@@ -104,8 +125,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  listaItens.addEventListener("input", calcularTotal);
-
-  // Calcula o total inicial
+  // Calcula o total inicial ao carregar a página.
   calcularTotal();
 });

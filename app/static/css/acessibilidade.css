@@ -85,7 +85,8 @@ body.modo-alto-contraste .detalhes-pedido-card,
 body.modo-alto-contraste .cliente-detalhes-card,
 body.modo-alto-contraste .status-pedido,
 body.modo-alto-contraste .pedido-form-card,
-body.modo-alto-contraste .status-pedido {
+body.modo-alto-contraste .status-pedido,
+body.modo-alto-contraste .empty-state {
   background: #000000;
   color: #ffffff;
   border: 2px solid #ffff00;
@@ -128,6 +129,7 @@ body.modo-alto-contraste .btn-sair:hover {
 
 /* -=-=-=- Campos de formulário -=-=-=- */
 
+body.modo-alto-contraste .produto-select,
 body.modo-alto-contraste .form-card,
 body.modo-alto-contraste .pedido-secao,
 body.modo-alto-contraste .pedido-item,

@@ -14,6 +14,10 @@ from app.controllers.web_controller import (
   atualizar_status_pedido_web,
   editar_pedido,
   excluir_pedido_web,
+  pagina_produtos,
+  novo_produto,
+  editar_produto,
+  excluir_produto_web,
   relatorio,
   sair
 )
@@ -114,6 +118,39 @@ web_bp.add_url_rule(
   view_func=excluir_pedido_web,
   methods=['POST']
 )
+
+# -=-=-=-=-=- PRODUTOS -=-=-=-=-=- #
+
+web_bp.add_url_rule(
+  '/painel/produtos',
+  endpoint='produtos',
+  view_func=pagina_produtos,
+  methods=['GET']
+)
+
+web_bp.add_url_rule(
+  '/painel/produtos/novo',
+  endpoint='novo_produto',
+  view_func=novo_produto,
+  methods=['GET', 'POST']
+)
+
+web_bp.add_url_rule(
+  '/painel/produtos/<int:produto_id>/editar',
+  endpoint='editar_produto',
+  view_func=editar_produto,
+  methods=['GET', 'POST']
+)
+
+web_bp.add_url_rule(
+  '/painel/produtos/<int:produto_id>/excluir',
+  endpoint='excluir_produto',
+  view_func=excluir_produto_web,
+  methods=['POST']
+)
+
+# -=-=-=-=-=- RELATÓRIOS -=-=-=-=-=- #
+
 
 web_bp.add_url_rule(
   '/painel/relatorio',
