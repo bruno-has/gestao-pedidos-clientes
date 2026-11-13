@@ -1,6 +1,11 @@
 /* -=-=-=-=-=- FORMULÁRIO DE PEDIDOS -=-=-=-=-=- */
 
 .pedido-container {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+
   width: 100%;
   max-width: 1100px;
   margin: 0 auto;
@@ -25,16 +30,29 @@
   margin: 0;
 }
 
+.btn-voltar {
+  align-self: flex-end;
+}
+
 .btn-voltar,
 .btn-cancelar {
   display: inline-block;
   padding: 10px 16px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  color: #333;
+  border-radius: 20px;
+  color: var(--azul-escuro);
+  background-color: var(--azul-claro);
   text-decoration: none;
-  background: #fff;
 }
+
+/* .menu-voltar {
+  align-self: flex-end;
+  margin: 10px 0;
+  padding: 9px 16px;
+  border-radius: 20px;
+  color: var(--azul-escuro);
+  background: var(--azul-claro);
+  font-weight: 700;
+}*/
 
 .pedido-secao {
   background: #fff;

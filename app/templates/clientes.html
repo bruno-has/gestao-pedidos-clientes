@@ -6,12 +6,12 @@
 
 <section class="page-container">
 
-  <div class="page-header">
+  <a href="{{ url_for('web.painel') }}" class="menu-voltar">
+    ← Voltar ao Menu
+  </a>
 
+  <div class="page-header">  
     <div>
-      <a href="{{ url_for('web.painel') }}" class="menu-voltar">
-        ← Voltar ao Menu
-      </a>
 
       <h1 class="page-title">
         <span aria-hidden="true">👥</span>
@@ -56,30 +56,35 @@
 
                 <a href="{{ url_for('web.detalhes_cliente', cliente_id=cliente.id) }}" class="btn-ver-pedido">Ver Histórico</a>
 
-                <a
+                <div class="actions">
+
+                  <a
                   href="{{ url_for('web.editar_cliente', cliente_id=cliente.id) }}"
+                  id="btn-editar"
                   class="action-button edit-button"
                   aria-label="Editar {{ cliente.nome }}"
                   title="Editar cliente"
-                >Editar</a>
-
-                <form
+                  >Editar</a>
+                  
+                  <form
                   action="{{ url_for('web.excluir_cliente', cliente_id=cliente.id) }}"
                   method="POST"
+                  id="btn-excluir"
                   class="delete-form"
                   onsubmit="return confirm('Deseja realmente excluir este cliente?');"
-                >
-
-                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-
-                  <button
+                  >
+                  
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                  
+                    <button
                       type="submit"
                       class="action-button delete-button"
-                  >Excluir</button>
-
+                    >Excluir</button>
+                  
                 </form>
-
-                </td>
+                
+                </div>
+              </td>
             </tr>
 
           {% endfor %}

@@ -6,13 +6,13 @@
 
 <div class="pedido-container">
 
+  <a href="{{ url_for('web.pedidos') }}" class="btn-voltar">← Voltar</a>
+
   <div class="pedido-cabecalho">
     <div>
       <h1>Novo Pedido</h1>
       <p>Preencha os dados para registrar um novo pedido.</p>
     </div>
-
-    <a href="{{ url_for('web.pedidos') }}" class="btn-voltar">Voltar</a>
   </div>
 
   {% if not produtos %}

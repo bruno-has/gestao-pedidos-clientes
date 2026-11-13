@@ -72,6 +72,7 @@ body.modo-alto-contraste strong {
 
 /* -=-=-=- Cartões e áreas de conteúdo -=-=-=- */
 
+body.modo-alto-contraste .header-user,
 body.modo-alto-contraste .indicador-card,
 body.modo-alto-contraste .menu-card,
 body.modo-alto-contraste .login-card,
@@ -97,6 +98,9 @@ body.modo-alto-contraste .menu-card:hover span {
   color: #000000;
 }
 
+body.modo-alto-contraste .btn-menu-mobile span {
+  background-color: #000000;
+}
 /* -=-=-=- Botões -=-=-=- */
 
 body.modo-alto-contraste button,
@@ -194,4 +198,10 @@ body.modo-alto-contraste select:focus-visible,
 body.modo-alto-contraste textarea:focus-visible {
   outline: 3px solid #ffff00;
   outline-offset: 3px;
+}
+
+@media screen and (min-width: 768px) {
+  body.modo-alto-contraste .header-user {
+    border: none;
+  }
 }

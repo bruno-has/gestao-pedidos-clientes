@@ -1,6 +1,11 @@
 /* -=-=-=-=-=- DETALHES DO CLIENTE E HISTÓRICO DE PEDIDOS -=-=-=-=-=- */
 
 .cliente-detalhes-container {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+
   width: 100%;
   max-width: 1100px;
   margin: 0 auto;
@@ -69,7 +74,7 @@
 .cliente-detalhes-acoes a,
 .btn-ver-pedido {
   display: inline-block;
-  padding: 10px 16px;
+  padding: 10px 0;
   border-radius: 6px;
   text-decoration: none;
   font-weight: 600;

@@ -6,13 +6,13 @@
 
 <div class="pedido-form-container">
 
+  <a href="{{ url_for('web.detalhes_pedido', pedido_id=pedido.id) }}" class="btn-voltar">Voltar aos detalhes</a>
+
   <div class="pedido-form-cabecalho">
     <div>
       <h1>Editar pedido #{{ pedido.id }}</h1>
       <p>Altere os dados e os itens deste pedido.</p>
     </div>
-
-    <a href="{{ url_for('web.detalhes_pedido', pedido_id=pedido.id) }}" class="btn-voltar">Voltar aos detalhes</a>
   </div>
 
   {% if not produtos %}

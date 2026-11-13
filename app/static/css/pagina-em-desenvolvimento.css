@@ -5,9 +5,9 @@
   margin: 0 auto;
 }
 
-.menu-voltar {
-  display: inline-block;
-  margin-bottom: 25px;
+.menu-voltar, .btn-voltar {
+  align-self: flex-end;
+  margin: 10px 0;
   padding: 9px 16px;
   border-radius: 20px;
   color: var(--azul-escuro);

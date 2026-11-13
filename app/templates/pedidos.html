@@ -2,11 +2,13 @@
 content %}
 
 <div class="pedidos-container">
+
+  <a href="{{ url_for('web.painel') }}" class="menu-voltar">
+    ← Voltar ao Menu
+  </a>
+  
   <div class="pedidos-cabecalho">
     <div>
-      <a href="{{ url_for('web.painel') }}" class="menu-voltar">
-        ← Voltar ao Menu
-      </a>
 
       <h1>Pedidos</h1>
       <p>Consulte os pedidos e acompanhe as retiradas.</p>
