@@ -6,14 +6,23 @@
 
 <div class="pedido-container">
 
+  <a href="{{ url_for('web.pedidos') }}" class="btn-voltar">← Voltar</a>
+
   <div class="pedido-cabecalho">
     <div>
       <h1>Novo Pedido</h1>
       <p>Preencha os dados para registrar um novo pedido.</p>
     </div>
-
-    <a href="{{ url_for('web.pedidos') }}" class="btn-voltar">Voltar</a>
   </div>
+
+  {% if not produtos %}
+  
+  <div class="flash-message flash-warning" role="status">
+    Nenhum produto cadastrado. Cadastre os produtos antes de registrar pedidos.
+    <a href="{{ url_for('web.novo_produto') }}">Cadastrar produto</a>
+  </div>
+
+  {% endif %}
 
   <form method="POST" action="{{ url_for('web.novo_pedido') }}">
 
@@ -78,20 +87,18 @@
                   <p>Adicione os produtos, quantidades e valores.</p>
               </div>
 
-              <button type="button" id="btn-adicionar-item" class="btn-adicionar">+ Adicionar item</button>
+              <button type="button" id="btn-adicionar-item" class="btn-adicionar" {% if not produtos %}disabled{% endif %}>+ Adicionar item</button>
           </div>
 
           <div id="lista-itens">
 
             {% if form_data %}
-              {% set nomes = form_data.getlist('nome_produto[]') %}
+              {% set produtos_selecionados = form_data.getlist('produto_id[]') %}
               {% set quantidades = form_data.getlist('quantidade[]') %}
-              {% set valores = form_data.getlist('valor_unitario[]') %}
-              {% set total_linhas = [nomes|length, quantidades|length, valores|length, 1]|max %}
+              {% set total_linhas = [produtos_selecionados|length, quantidades|length, 1]|max %}
             {% else %}
-              {% set nomes = [''] %}
+              {% set produtos_selecionados = [''] %}
               {% set quantidades = ['1'] %}
-              {% set valores = [''] %}
               {% set total_linhas = 1 %}
             {% endif %}
 
@@ -101,14 +108,17 @@
 
                 <div class="pedido-campo produto-campo">
                   <label>Produto</label>
-                  <input
-                    type="text"
-                    name="nome_produto[]"
-                    placeholder="Ex.: Bolo de chocolate"
-                    maxlength="100"
-                    value="{{ nomes[i] if i < nomes|length else '' }}"
-                    required
-                  >
+                  <select name="produto_id[]" class="produto_select" aria-label="Selecione o produto do item {{ i + 1 }}" required>
+                    <option value="">Selecione um produto</option>
+
+                    {% for produto in produtos %}
+                      <option value="{{ produto.id }}" data-valor="{{ '%.2f'|format(produto.valor_unitario) }}" {% if i < produtos_selecionados|length and produtos_selecionados[i] == produto.id|string %}selected{% endif %}>
+                        {{ produto.nome }}
+                      </option>
+                    {% endfor %}
+
+                  </select>
+
                 </div>
 
                 <div class="pedido-campo quantidade-campo">
@@ -119,19 +129,6 @@
                     min="1"
                     step="1"
                     value="{{ quantidades[i] if i < quantidades|length else '1' }}"
-                    required
-                  >
-                </div>
-
-                <div class="pedido-campo valor-campo">
-                  <label>Valor unitário (R$)</label>
-                  <input
-                    type="number"
-                    name="valor_unitario[]"
-                    min="0.01"
-                    step="0.01"
-                    placeholder="0,00"
-                    value="{{ valores[i] if i < valores|length else '' }}"
                     required
                   >
                 </div>

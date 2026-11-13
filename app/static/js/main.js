@@ -18,6 +18,62 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Controle do menu responsivo do cabeçalho.
+  const botaoMenu = document.getElementById('btn-menu-mobile');
+  const menuHeader = document.getElementById('menu-header');
+  if (botaoMenu && menuHeader) {
+    const menuMobile = window.matchMedia('(max-width: 767px)');
+
+    const fecharMenu = () => {
+      menuHeader.classList.remove('menu-aberto');
+      botaoMenu.setAttribute('aria-expanded', 'false');
+      botaoMenu.setAttribute('aria-label', 'Abrir menu');
+    };
+
+    const alterarMenu = () => {
+      const menuAberto = menuHeader.classList.toggle('menu-aberto');
+      botaoMenu.setAttribute('aria-expanded', String(menuAberto));
+      botaoMenu.setAttribute('aria-label', 
+        menuAberto ? 'Fechar menu' : 'Abrir Menu'
+      );
+    };
+
+    // Abre ou fecha menu pelo botão.
+    botaoMenu.addEventListener('click', alterarMenu);
+
+    // Fecha ao clicar em um link do menu.
+    menuHeader.addEventListener('click', (evento) => {
+      if (evento.target.closest('a')) {
+        fecharMenu();
+      }
+    });
+
+    // Fecha ao clicar fora do menu.
+    document.addEventListener('click', (evento) => {
+      if (
+        !menuHeader.contains(evento.target) &&
+        !botaoMenu.contains(evento.target)
+      ) {
+        fecharMenu();
+      }
+    });
+
+    // Fechar ao pressionar 'ESC'.
+    document.addEventListener('keydown', (evento) => {
+      if (evento.key === 'Escape') {
+        fecharMenu();
+        botaoMenu.focus();
+      }
+    });
+
+    // Fecha o menu ao mudar para um tela maior.
+    menuMobile.addEventListener('change', (evento) => {
+      if (!evento.matches) {
+        fecharMenu();
+      }
+    });
+  }
+
   // Controle do modo de alto contraste.
   const botaoContraste = document.getElementById('btn-alto-contraste');
   if (botaoContraste) {

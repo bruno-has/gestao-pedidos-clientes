@@ -74,6 +74,8 @@
 /* -=-=-=-=-=- BOTÕES -=-=-=-=-=- */
 
 .button {
+  color: var(--branco);
+  background-color: var(--azul-principal);
   min-height: 46px;
   padding: 10px 20px;
   border: 1px solid transparent;

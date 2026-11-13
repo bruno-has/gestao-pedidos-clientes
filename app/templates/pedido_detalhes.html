@@ -5,6 +5,8 @@
 {% block content %}
 
 <div class="detalhes-pedido-container">
+  
+  <a href="{{ url_for('web.pedidos') }}" class="btn-voltar">Voltar aos pedidos</a>
 
   <div class="detalhes-pedido-cabecalho">
     <div>
@@ -23,8 +25,6 @@
         <button type="submit" class="btn-excluir-pedido">Excluir pedido</button>
         
       </form>
-
-      <a href="{{ url_for('web.pedidos') }}" class="btn-voltar">Voltar aos pedidos</a>
 
     </div>
   </div>

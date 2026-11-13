@@ -1,17 +1,18 @@
 /* RELATÓRIO DE PEDIDOS */
 
 .relatorio-container {
+  display: flex;
+  flex-flow: column nowrap;
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 24px;
 }
 
 .relatorio-header {
+  margin-top: 5px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-
 }
 
 .relatorio-header h1 {
@@ -68,7 +69,7 @@
 .relatorio-indicadores {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-  gap: 16px;
+  gap: 4px;
   margin-bottom: 24px;
 }
 
@@ -76,7 +77,7 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding: 22px;
+  padding: 8px;
   background: #fff;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
@@ -88,7 +89,7 @@
 }
 
 .indicador-card strong {
-  font-size: 1.7rem;
+  font-size: 1.5rem;
   color: #2f88ad;
 }
 
@@ -113,6 +114,7 @@
 .tabela-responsiva {
   width: 100%;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .tabela-relatorio {

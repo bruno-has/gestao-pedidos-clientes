@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %} 
+
+  {% if produto %}Editar Produto{% else %}Novo Produto{% endif %}
+
+{% endblock %}
+
+{% block content %}
+
+<section class="form-page">
+
+  <a href="{{ url_for('web.produtos') }}" class="btn-voltar">
+    ← Voltar para Produtos
+  </a>
+
+  <div class="form-card">
+
+    <div class="form-header">
+
+      <span aria-hidden="true">🧁</span>
+
+      <div>
+        <h1>
+          {% if produto %}
+            Editar Produto
+          {% else %}
+            Novo Produto
+          {% endif %}
+        </h1>
+
+        <p>
+          Informe o nome e o valor unitário do produto.
+        </p>
+      </div>
+
+    </div>
+
+    <form method="POST" class="client-form">
+
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+      <div class="form-group">
+
+        <label for="nome">Nome do produto</label>
+
+        <input type="text" id="nome" name="nome" value="{{ form_data.get('nome', '') if form_data else (produto.nome if produto else '') }}" placeholder="Ex.: Bolo de chocolate" minlength="2" maxlength="100" required>
+
+      </div>
+
+      <div class="form-group">
+
+        <label for="valor_unitario">Valor unitário (R$)</label>
+
+        <input type="number" id="valor_unitario" name="valor_unitario" min="0.01" max="99999999.99" step="0.01" placeholder="0.00" value="{{ form_data.get('valor_unitario', '') if form_data else ('%.2f'|format(produto.valor_unitario) if produto else '') }}" required>
+
+      </div>
+
+      <div class="form-actions">
+
+        <a href="{{ url_for('web.produtos') }}" class="button btn-cancelar">Cancelar</a>
+
+        <button type="submit" class="button btn-entrar">
+          {% if produto %}
+            Salvar Alterações
+          {% else %}
+            Cadastrar Produto
+          {% endif %}
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</section>
+
+{% endblock %}

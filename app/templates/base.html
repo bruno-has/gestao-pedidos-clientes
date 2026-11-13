@@ -17,26 +17,48 @@
         <span class="nome-logo">Gestão de Pedidos e Clientes</span>
       </a>
 
-      <div class="header-user">
+      <button 
+        type="button" 
+        id="btn-menu-mobile" 
+        class="btn-menu-mobile" 
+        aria-label="Abrir menu" 
+        aria-expanded="false" aria-controls="menu-header"
+      >
+        <span></span>  
+        <span></span>  
+        <span></span>  
+      </button>
+
+      <nav id="menu-header" class="header-user">
         <a href="{{ url_for('web.relatorio') }}" class="btn-relatorio">Relatórios</a>
 
-        <button type="button" id="btn-alto-contraste" class="btn-acessibilidade" aria-pressed="false" title="Ativar ou desativar o alto contraste">Alto contraste</button>
+        <button 
+          type="button" 
+          id="btn-alto-contraste" 
+          class="btn-acessibilidade" 
+          aria-pressed="false" 
+          title="Ativar ou desativar o alto contraste"
+        >
+          Alto contraste
+        </button>
 
         <span class="msg-user">
           <span aria-hidden="true">👤</span>
           Olá, {{ current_user.nome }}!
+        
+
+          <form action="{{ url_for('web.sair') }}" method="POST">
+
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <button type="submit" class="btn-sair" aria-label="Sair do sistema" title="Sair">
+              <span aria-hidden="true">⇥</span>
+            </button>
+            
+          </form>
         </span>
 
-        <form action="{{ url_for('web.sair') }}" method="POST">
-
-          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-
-          <button type="submit" class="btn-sair" aria-label="Sair do sistema" title="Sair">
-            <span aria-hidden="true">⇥</span>
-          </button>
-          
-        </form>
-      </div>
+      </nav>
 
     </header>
   {% endif %}

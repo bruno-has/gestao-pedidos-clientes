@@ -6,7 +6,9 @@
 
 <div class="relatorio-container">
 
-  
+  <a href="{{ url_for('web.painel') }}" class="menu-voltar">
+      ← Voltar ao Menu
+  </a>
 
   <div class="relatorio-header">
 
@@ -14,9 +16,7 @@
       <h1>Relatório de pedidos</h1>
       <p>Consulte os pedidos cadastrados em determinado período.</p>
     </div>
-    <a href="{{ url_for('web.painel') }}" class="menu-voltar">
-      ← Voltar ao Menu
-    </a>
+    
     
   </div>
 
@@ -39,7 +39,7 @@
 
         </div>
 
-        <button type="submit" class="btn-principal">Gerar relatório</button>
+        <button type="submit" class="button">Gerar relatório</button>
 
       </div>
     </form>
@@ -117,7 +117,7 @@
             <td>R$ {{ '{:,.2f}'.format(registro.total).replace(',', 'X').replace('.', ',').replace('X', '.') }}</td>
 
             <td>
-              <a href="{{ url_for('web.detalhes_pedido', pedido_id=pedido.id) }}" class="btn-secundario">Ver detalhes</a>
+              <a href="{{ url_for('web.detalhes_pedido', pedido_id=pedido.id) }}" class="button">Ver detalhes</a>
             </td>
           </tr>
 

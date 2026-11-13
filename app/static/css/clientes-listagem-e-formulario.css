@@ -6,24 +6,29 @@
   border: 1px solid var(--azul-borda);
   border-radius: var(--raio);
   box-shadow: var(--sombra);
+  width: 100%;
 }
 
 .data-table {
   width: 100%;
   border-collapse: collapse;
-  text-align: left;
+  text-align: center;
 }
 
 .data-table th,
 .data-table td {
-  padding: 17px 20px;
   border-bottom: 1px solid #dce5f0;
+  padding: 5px;
 }
 
 .data-table th {
   color: var(--texto-principal);
   background: #e5f0fc;
   font-weight: 700;
+}
+
+.data-table thead {
+  height: 50px;
 }
 
 .data-table tbody tr:last-child td {
@@ -35,24 +40,33 @@
 }
 
 .actions-column {
-  width: 220px;
+  width: 10%;
+  max-width: 400px;
 }
 
 .table-actions {
   display: flex;
+  flex-flow: column nowrap;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
+  width: 100%;
 }
 
-.delete-form {
-  margin: 0;
+.actions {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  gap: 5px;
+  width: 100%;
+}
+
+.actions a,
+.actions form {
+  flex: 1;
 }
 
 .action-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 36px;
+  min-height: 22px;
   padding: 7px 12px;
   border: none;
   border-radius: 7px;
@@ -61,14 +75,23 @@
   cursor: pointer;
 }
 
+.delete-form {
+  margin: 0;
+}
+
 .edit-button {
   color: var(--azul-escuro);
   background: var(--azul-claro);
 }
 
-.delete-button {
+.delete-button,
+.delete-form {
   color: #a12a21;
   background: #fde9e7;
+}
+
+.delete-form:hover {
+  cursor: pointer;
 }
 
 .action-button:hover {
@@ -106,7 +129,11 @@
 /* -=-=-=-=-=- FORMULÁRIO DE CLIENTE -=-=-=-=-=- */
 
 .form-page {
-  max-width: 750px;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  max-width: 800px;
 }
 
 .form-card {
@@ -115,6 +142,7 @@
   border: 1px solid var(--azul-borda);
   border-radius: var(--raio);
   box-shadow: var(--sombra);
+  width: min(100%, 800px);
 }
 
 .form-heading {

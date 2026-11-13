@@ -3,6 +3,7 @@
 .dashboard-container {
   width: min(100%, 850px);
   margin: 35px auto;
+  padding: 10px;
 }
 
 .dashboard-header {

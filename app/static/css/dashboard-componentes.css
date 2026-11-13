@@ -106,6 +106,7 @@
   background-color: #fff;
   border: 1px solid #e5e5e5;
   border-radius: 8px;
+  text-align: center;
 }
 
 .retirada-informacoes,
@@ -129,6 +130,15 @@
   color: #333;
 }
 
+.retirada-status {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5px 0;
+  width: 100%;
+}
+
 .retirada-status span {
   display: inline-block;
   padding: 6px 10px;
@@ -138,6 +148,7 @@
   font-size: 12px;
   font-weight: 600;
   text-transform: capitalize;
+  width: 100%;
 }
 
 .status-pendente {
@@ -156,13 +167,13 @@
 }
 
 .btn-ver-pedido {
-  justify-self: start;
-  padding: 8px 13px;
+  width: 100%;
+  padding: 5px 0;
   border-radius: 6px;
   background-color: #2f88ad;
   color: #fff;
-  font-size: 13px;
   text-decoration: none;
+  text-align: center;
   transition: background-color 0.2s ease;
 }
 

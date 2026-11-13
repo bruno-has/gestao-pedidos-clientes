@@ -2,6 +2,36 @@
 
 @media (min-width: 768px) {
 
+  .main-content {
+    width: 90%;
+  }
+
+  .btn-menu-mobile {
+    display: none;
+  }
+
+  .header-user {
+    position: relative;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 5px;
+
+    background-color: transparent;
+    color: var(--branco);
+    box-shadow: none;
+    width: 80%;
+  }
+
+  .header-user > .btn-acessibilidade, .btn-relatorio {
+    max-width: 220px;
+  }
+
+  .btn-sair span {
+    color: var(--branco);
+  }
+
   .dashboard-menu {
     gap: 20px;
   }
@@ -22,72 +52,13 @@
   .dashboard-container {
     margin-top: 45px;
   }
-}
 
-@media (max-width: 600px) {
-
-  .main-header {
-    min-height: 80px;
-    padding: 15px 20px;
-  }
-
-  .logo {
-    gap: 9px;
-  }
-
-  .icon-logo {
-    font-size: 32px;
+  .header-user {
+    max-width: 600px;
   }
 
   .nome-logo {
-    font-size: 15px;
-  }
-
-  .header-user {
-    gap: 10px;
-  }
-
-  .msg-user {
-    font-size: 12px;
-  }
-
-  .btn-sair {
-    width: 30px;
-    height: 35px;
-    padding-left: 9px;
-    font-size: 25px;
-  }
-
-  .main-content {
-    width: min(100% - 30px, 1200px);
-    padding: 30px 0;
-  }
-
-  .login-card {
-    padding: 30px 22px;
-  }
-
-  .dashboard-container {
-    margin: 15px auto;
-  }
-
-  .dashboard-header {
-    margin-bottom: 30px;
-  }
-
-  .dashboard-header p {
-    font-size: 18px;
-  }
-
-  .menu-card {
-    min-height: 100px;
-    padding: 15px;
-    gap: 15px;
-    font-size: 19px;
-  }
-
-  .menu-icon {
-    font-size: 35px;
+    display: block;
   }
 }
 
@@ -95,7 +66,12 @@
 
 .page-container,
 .form-page {
-  width: min(100%, 1000px);
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
   margin: 0 auto;
 }
 

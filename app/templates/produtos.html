@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Produtos{% endblock %}
+
+{% block content %}
+
+<section class="page-container">
+  
+  <a href="{{ url_for('web.painel') }}" class="menu-voltar">
+    ← Voltar ao Menu
+  </a>
+
+  <div class="page-header">
+
+    <div>
+
+      <h1 class="page-title">
+        <span aria-hidden="true">🧁</span>
+        Produtos
+      </h1>
+
+      <p class="page-description">
+        Gerencie os produtos disponíveis para os pedidos.
+      </p>
+    </div>
+
+    <a href="{{ url_for('web.novo_produto') }}" class="button button-primary">+ Novo Produto</a>
+
+  </div>
+
+  <div class="table-container">
+
+    {% if produtos %}
+      <table class="data-table">
+
+        <thead>
+          <tr>
+            <th>Produto</th>
+            <th>Valor unitário</th>
+            <th class="actions-column">Ações</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          {% for produto in produtos %}
+
+            <tr>
+              <td>{{ produto.nome }}</td>
+
+              <td>
+                R$ {{ '%.2f'|format(produto.valor_unitario) }}
+              </td>
+
+              <td class="table-actions">
+
+                <a href="{{ url_for('web.editar_produto', produto_id=produto.id) }}" class="action-button edit-button">Editar</a>
+
+                <form action="{{ url_for('web.excluir_produto', produto_id=produto.id) }}" method="POST" class="delete-form" onsubmit="return confirm('Deseja realmente excluir este produto?');">
+
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                  <button type="submit" class="action-button delete-button">Excluir</button>
+
+                </form>
+
+              </td>
+            </tr>
+
+          {% endfor %}
+
+        </tbody>
+
+      </table>
+
+    {% else %}
+      <div class="empty-state">
+
+        <span aria-hidden="true">🧁</span>
+
+        <h2>Nenhum produto cadastrado</h2>
+
+        <p>Cadastre os produtos para facilitar o registro dos pedidos.</p>
+
+        <a href="{{ url_for('web.novo_produto') }}" class="button button-primary">Cadastrar primeiro produto</a>
+
+      </div>
+
+    {% endif %}
+
+  </div>
+
+  {% if produtos %}
+    <p class="table-summary">
+      Total de produtos: <strong>{{ produtos|length }}</strong>
+    </p>
+  {% endif %}
+
+</section>
+
+{% endblock %}

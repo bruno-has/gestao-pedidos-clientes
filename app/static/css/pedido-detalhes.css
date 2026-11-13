@@ -1,6 +1,11 @@
 /* -=-=-=-=-=- DETALHES DO PEDIDO -=-=-=-=-=- */
 
 .detalhes-pedido-container {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+
   width: 100%;
   max-width: 1100px;
   margin: 0 auto;
@@ -148,7 +153,6 @@
 
 .btn-ver-pedido {
   display: inline-block;
-  padding: 8px 12px;
   border: 1px solid #2f88ad;
   border-radius: 6px;
   color: #2f88ad;

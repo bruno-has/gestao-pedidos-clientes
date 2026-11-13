@@ -1,6 +1,11 @@
 /* -=-=-=-=-=- LISTAGEM DE PEDIDOS -=-=-=-=-=- */
 
 .pedidos-container {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;

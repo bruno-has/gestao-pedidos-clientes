@@ -78,10 +78,10 @@
               <span class="status-{{ pedido.status|replace(' ', '-') }}">
                 {{ pedido.status|capitalize }}
               </span>
+              
+              <a href="{{ url_for('web.detalhes_pedido', pedido_id=pedido.id) }}" class="btn-ver-pedido">Ver pedido</a>
+              
             </div>
-
-            <a href="{{ url_for('web.detalhes_pedido', pedido_id=pedido.id) }}" class="btn-ver-pedido">Ver pedido</a>
-
           </article>
 
         {% endfor %}
@@ -119,6 +119,11 @@
       <a href="{{ url_for('web.pedidos') }}" class="menu-card">
         <span class="menu-icon" aria-hidden="true">📋</span>
         <span>Pedidos</span>
+      </a>
+
+      <a href="{{ url_for('web.produtos') }}" class="menu-card">
+        <span class="menu-icon" aria-hidden="true">🛍️</span>
+        <span>Produtos</span>
       </a>
 
     </div>

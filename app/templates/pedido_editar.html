@@ -6,19 +6,22 @@
 
 <div class="pedido-form-container">
 
+  <a href="{{ url_for('web.detalhes_pedido', pedido_id=pedido.id) }}" class="btn-voltar">Voltar aos detalhes</a>
+
   <div class="pedido-form-cabecalho">
     <div>
       <h1>Editar pedido #{{ pedido.id }}</h1>
       <p>Altere os dados e os itens deste pedido.</p>
     </div>
-
-    <a href="{{ url_for('web.detalhes_pedido', pedido_id=pedido.id) }}" class="btn-voltar">Voltar aos detalhes</a>
   </div>
 
-  {% if erro %}
-  <div class="mensagem-erro">
-    {{ erro }}
+  {% if not produtos %}
+
+  <div class="flash-message flash-warning" role="status">
+    Não existem produtos cadastrados
+    <a href="{{ url_for('web.novo_produto') }}">Cadastrar produto</a>
   </div>
+
   {% endif %}
 
   <form method="POST" action="{{ url_for('web.editar_pedido', pedido_id=pedido.id) }}" class="form-pedido">
@@ -66,7 +69,7 @@
           <p>Edite, remova ou adicione produtos.</p>
         </div>
 
-        <button type="button" id="adicionar-item"class="btn-adicionar-item">+ Adicionar item</button>
+        <button type="button" id="adicionar-item"class="btn-adicionar-item" {% if not produtos %}disabled{% endif %}>+ Adicionar item</button>
       </div>
 
       <div id="lista-itens-pedido">
@@ -75,20 +78,37 @@
         <div class="pedido-item">
           <div class="pedido-campo">
             <label>Produto</label>
+            
+            <select name="produto_id[]" class="produto-select" aria-label="Selecione o produto" required>
+              <option value="">Selecione um produto</option>
 
-            <input type="text" name="nome_produto[]" value="{{ item.nome_produto }}" maxlength="100" required/>
+              {% for produto in produtos %}
+                <option value="{{ produto.id }}" data-valor="{{ '%.2f'|format(produto.valor_unitario) }}"{% if item.produto_id == produto.id %}select{% endif %}>
+                  {{ produto.nome }}
+                </option>
+              {% endfor %}
+
+            </select>
+
+            <small class="valor-unitario-exibicao">
+              {% if item.produto_id %}
+                Valor unitário: R$ {{ '%.2f'|format(item.valor_unitario) }}
+              {% else %}
+                Produto registrado: {{ item.nome_produto }}.
+                Valor histórico: R$ {{ '%.2f'|format(item.valor_unitario) }}
+              {% endif %}
+            </small>
+
+            {% if not item.produto_id %}
+              <small>Este item pertence a um pedido anterior. Selecione o produto correspondente</small>
+            {% endif %}
+
           </div>
 
           <div class="pedido-campo">
             <label>Quantidade</label>
 
-            <input type="number" name="quantidade[]" value="{{ item.quantidade }}" min="1" required/>
-          </div>
-
-          <div class="pedido-campo">
-            <label>Valor unitário (R$)</label>
-
-            <input type="number" name="valor_unitario[]" value="{{ '%.2f'|format(item.valor_unitario) }}" min="0.01" step="0.01" required/>
+            <input type="number" name="quantidade[]" value="{{ item.quantidade }}" min="1" step="1" required/>
           </div>
 
           <button type="button" class="btn-remover-item">Remover</button>
@@ -109,7 +129,7 @@
 
       <a href="{{ url_for('web.detalhes_pedido', pedido_id=pedido.id) }}" class="btn-cancelar">Cancelar</a>
 
-      <button type="submit" class="btn-salvar-pedido">Salvar alterações</button>
+      <button type="submit" class="btn-salvar-pedido" {% if not produtos or not clientes %}disabled{% endif %}>Salvar alterações</button>
       
     </div>
   </form>
