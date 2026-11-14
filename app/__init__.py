@@ -34,6 +34,9 @@ def create_app(test_config=None):
   if test_config is not None:
     app.config.update(test_config)
 
+  # valida as configuracoes obrigatorias
+  Config.validar_configuracao(app)
+
   db.init_app(app)
 
   login_manager.init_app(app)
